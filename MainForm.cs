@@ -800,6 +800,8 @@ namespace AutoDialUp
                 this.ShowInTaskbar = false;
                 //图标显示在托盘区
                 notifyIcon_MainForm.Visible = true;
+                //隐藏Alt+Tab中的窗口
+                this.Visible = false;
                 //更改Text为最小化运行中
                 this.notifyIcon_MainForm.Text = "自动拨号器 - 后台运行中";
                 软件状态ToolStripMenuItem.Text = "自动拨号器 - 后台运行中";//托盘菜单中的软件状态
@@ -824,6 +826,8 @@ namespace AutoDialUp
                     this.Activate();
                     //任务栏区显示图标
                     this.ShowInTaskbar = true;
+                    //显示Alt+Tab中的窗口
+                    this.Visible = true;
                     //更改Text为运行中
                     this.notifyIcon_MainForm.Text = "自动拨号器 - 运行中";
                     软件状态ToolStripMenuItem.Text = "自动拨号器 - 运行中";//托盘菜单中的软件状态
@@ -860,7 +864,7 @@ namespace AutoDialUp
 
         private void uiSymbolButton_SourceAddress_Click(object sender, EventArgs e)
         {
-
+            Process.Start("https://github.com/EJianZQ/AutoDialUp");
         }
 
         private void uiSymbolButton_CheckUpdate_Click(object sender, EventArgs e)
