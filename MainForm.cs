@@ -737,7 +737,9 @@ namespace AutoDialUp
         /// </summary>
         private void timer_AutoReConnect_Tick(object sender, EventArgs e)
         {
-            if(softwareConfig != null)
+            if (timer_AutoReConnect.Interval == 60000) //连接成功后60秒后才会重新检测，如果是重新检测则把时钟恢复常态
+                timer_AutoReConnect.Interval = 6000;
+            if (softwareConfig != null)
             {
                 if(softwareConfig.AutoReConnect == 1)//判断用户有没有启用自动重连功能 如果没有启用该功能则时钟自动禁用
                 {
@@ -755,6 +757,7 @@ namespace AutoDialUp
                                 {
                                     Toast.ShowNotifiy("自动重连", "检测到网络断开，已自动重连成功", Notifications.Wpf.NotificationType.Success);
                                     _autoReConnectFlag = 1;//把tag置为1以免重复重连导致软件主线程阻塞时间变长
+                                    timer_AutoReConnect.Interval = 60000;//重连成功后避免多次重连导致拨号故障，下一次重连设置为60秒后
                                     break;
                                 }
                                 else
@@ -765,11 +768,11 @@ namespace AutoDialUp
                                         //这里需要做一个如果重连失败后就不再重连了，避免软件很卡，但是持续检测网络是在线程中进行，无法操作时钟，需要一个tag，在下次更新中进行实现
                                         //Toast.ShowNotifiy("自动重连", "检测到网络断开，且自动重连失败\n已临时关闭自动重连功能避免软件卡死，手动连接网络成功后自动重连功能会再次开启", Notifications.Wpf.NotificationType.Error);
                                         Toast.ShowNotifiy("自动重连", "检测到网络断开，且自动重连全部失败", Notifications.Wpf.NotificationType.Error);
+                                        timer_AutoReConnect.Interval = 6000;//重连失败，继续重连，后期改
                                         break;
                                     }
                                 }
                             }
-                            timer_AutoReConnect.Interval = 6000;//重连完毕了就要把时钟周期还原回去继续检测了
                         }
                     }
                 }
