@@ -61,6 +61,7 @@ namespace AutoDialUp
                             uiSymbolLabel_ConnectCheck.Text = "网络未连接";
                             uiSymbolLabel_InternetDeviceType.Text = "上网类型未知";
                             uiSymbolLabel_PingOK.Text = "Ping失败";
+                            _autoReConnectFlag = 0;
                             break;
                         }
                     case 2: 
@@ -81,6 +82,7 @@ namespace AutoDialUp
                             uiSymbolLabel_ConnectCheck.Text = "网络已连接";
                             uiSymbolLabel_InternetDeviceType.Text = "调制解调器上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
+                            _autoReConnectFlag = 1;
                             break;
                         }
                     case 3:
@@ -101,6 +103,7 @@ namespace AutoDialUp
                             uiSymbolLabel_ConnectCheck.Text = "网络已连接";
                             uiSymbolLabel_InternetDeviceType.Text = "使用网卡上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
+                            _autoReConnectFlag = 1;
                             break;
                         }
                         case 4:
@@ -121,6 +124,7 @@ namespace AutoDialUp
                             uiSymbolLabel_ConnectCheck.Text = "网络未连接";
                             uiSymbolLabel_InternetDeviceType.Text = "调制解调器上网";
                             uiSymbolLabel_PingOK.Text = "Ping失败";
+                            _autoReConnectFlag = 0;
                             break;
                         }
                     case 5:
@@ -141,6 +145,7 @@ namespace AutoDialUp
                             uiSymbolLabel_ConnectCheck.Text = "网络未连接";
                             uiSymbolLabel_InternetDeviceType.Text = "使用网卡上网";
                             uiSymbolLabel_PingOK.Text = "Ping失败";
+                            _autoReConnectFlag = 0;
                             break;
                         }
                 }
@@ -407,42 +412,48 @@ namespace AutoDialUp
                 if(savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account !="解密失败" && savedaccount.Password != "解密失败")
                 {
                     uiSymbolButton_OneKeyConnect.Enabled = false;
-                    uiProcessBar_ConectProcess.Visible = true;
-                    switch (uiComboBox_ConnectMethod.SelectedIndex)
+                    int tempNetChecker = GetInternetConStatus.GetNetConStatus("baidu.com");
+                    if(tempNetChecker == 1 || tempNetChecker == 4 || tempNetChecker == 5)
                     {
-                        case 0:
-                            {
-                                Process p = new Process();//新建一个进程对象
-                                uiProcessBar_ConectProcess.Value = 15;
-                                p.StartInfo.FileName = "Rasdial.exe";//设置要启动的进程名字
-                                uiProcessBar_ConectProcess.Value = 30;
-                                p.StartInfo.Arguments = Decrypt.DES(savedaccount.Name, "latiaonb") + " " + Decrypt.DES(savedaccount.Account, "latiaonb") + " " + Decrypt.DES(savedaccount.Password, "latiaonb");//传递参数 格式 连接名字+空格+账号+空格+密码
-                                uiProcessBar_ConectProcess.Value = 45;
-                                //Console.WriteLine(p.StartInfo.Arguments);
-                                p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;//设置执行时的控制台为隐藏的
-                                uiProcessBar_ConectProcess.Value = 60;
-                                p.Start();//开始执行
-                                uiProcessBar_ConectProcess.Value = 75;
-                                p.WaitForExit();//等待连接后自动退出
-                                uiProcessBar_ConectProcess.Value = 90;
-                                if (p.ExitCode == 0)//通过退出返回的代码判断连接是否成功
+                        uiProcessBar_ConectProcess.Visible = true;
+                        switch (uiComboBox_ConnectMethod.SelectedIndex)
+                        {
+                            case 0:
                                 {
-                                    Toast.ShowNotifiy("一键连接", String.Format("状态:宽带连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
+                                    Process p = new Process();//新建一个进程对象
+                                    uiProcessBar_ConectProcess.Value = 15;
+                                    p.StartInfo.FileName = "Rasdial.exe";//设置要启动的进程名字
+                                    uiProcessBar_ConectProcess.Value = 30;
+                                    p.StartInfo.Arguments = Decrypt.DES(savedaccount.Name, "latiaonb") + " " + Decrypt.DES(savedaccount.Account, "latiaonb") + " " + Decrypt.DES(savedaccount.Password, "latiaonb");//传递参数 格式 连接名字+空格+账号+空格+密码
+                                    uiProcessBar_ConectProcess.Value = 45;
+                                    //Console.WriteLine(p.StartInfo.Arguments);
+                                    p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;//设置执行时的控制台为隐藏的
+                                    uiProcessBar_ConectProcess.Value = 60;
+                                    p.Start();//开始执行
+                                    uiProcessBar_ConectProcess.Value = 75;
+                                    p.WaitForExit();//等待连接后自动退出
+                                    uiProcessBar_ConectProcess.Value = 90;
+                                    if (p.ExitCode == 0)//通过退出返回的代码判断连接是否成功
+                                    {
+                                        Toast.ShowNotifiy("一键连接", String.Format("状态:宽带连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
+                                    }
+                                    else
+                                    {
+                                        Toast.ShowNotifiy("一键连接", String.Format("状态:宽带连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
+                                    }
+                                    uiProcessBar_ConectProcess.Value = 100;
+                                    uiProcessBar_ConectProcess.Visible = false;
+                                    break;
                                 }
-                                else
+                            case 1:
                                 {
-                                    Toast.ShowNotifiy("一键连接", String.Format("状态:宽带连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
+                                    MessageBox.Show("尚未实现PPPoE，请等待更新");
+                                    break;
                                 }
-                                uiProcessBar_ConectProcess.Value = 100;
-                                uiProcessBar_ConectProcess.Visible = false;
-                                break;
-                            }
-                        case 1:
-                            {
-                                MessageBox.Show("尚未实现PPPoE，请等待更新");
-                                break;
-                            }
+                        }
                     }
+                    else
+                        ShowErrorDialog("错误", "由于网络已处于连接状态，无须一键连接");
                     uiSymbolButton_OneKeyConnect.Enabled = true;
                 }
                 else
@@ -698,20 +709,26 @@ namespace AutoDialUp
             {
                 if (softwareConfig != null)
                 {
-                    if (File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
+                    int tempNetChecker = GetInternetConStatus.GetNetConStatus("baidu.com");
+                    if (tempNetChecker == 1 || tempNetChecker ==4 || tempNetChecker == 5)
                     {
-                        timer_AutoConnect.Interval = 5201314;//先挂起时钟避免多次连接
-                        if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
+                        if (File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
                         {
-                            Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
+                            timer_AutoConnect.Interval = 5201314;//先挂起时钟避免多次连接
+                            if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
+                            {
+                                Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
+                            }
+                            else
+                            {
+                                Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
+                            }
                         }
                         else
-                        {
-                            Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
-                        }
+                            Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2", Notifications.Wpf.NotificationType.Error);
                     }
                     else
-                        Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2", Notifications.Wpf.NotificationType.Error);
+                        Toast.ShowNotifiy("自动连接", "由于网络已处于连接状态，启动时自动连接已取消", Notifications.Wpf.NotificationType.Information);
                 }
                 else
                     Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接", Notifications.Wpf.NotificationType.Error);

@@ -70,6 +70,9 @@
             this.uiLine2 = new Sunny.UI.UILine();
             this.tabPage_HotKey = new System.Windows.Forms.TabPage();
             this.tabPage_About = new System.Windows.Forms.TabPage();
+            this.uiSymbolButton_CheckUpdate = new Sunny.UI.UISymbolButton();
+            this.uiSymbolButton_SourceAddress = new Sunny.UI.UISymbolButton();
+            this.uiSymbolButton_ProjectPage = new Sunny.UI.UISymbolButton();
             this.uiSmoothLabel1 = new Sunny.UI.UISmoothLabel();
             this.uiSymbolLabel3 = new Sunny.UI.UISymbolLabel();
             this.uiLabel2 = new Sunny.UI.UILabel();
@@ -86,9 +89,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.一键连接ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出软件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uiSymbolButton_ProjectPage = new Sunny.UI.UISymbolButton();
-            this.uiSymbolButton_SourceAddress = new Sunny.UI.UISymbolButton();
-            this.uiSymbolButton_CheckUpdate = new Sunny.UI.UISymbolButton();
             this.tabControl.SuspendLayout();
             this.tabPage_Status.SuspendLayout();
             this.uiTitlePanel3.SuspendLayout();
@@ -702,6 +702,54 @@
             this.tabPage_About.TabIndex = 2;
             this.tabPage_About.Text = "关于";
             // 
+            // uiSymbolButton_CheckUpdate
+            // 
+            this.uiSymbolButton_CheckUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiSymbolButton_CheckUpdate.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_CheckUpdate.Location = new System.Drawing.Point(412, 203);
+            this.uiSymbolButton_CheckUpdate.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiSymbolButton_CheckUpdate.Name = "uiSymbolButton_CheckUpdate";
+            this.uiSymbolButton_CheckUpdate.Size = new System.Drawing.Size(142, 48);
+            this.uiSymbolButton_CheckUpdate.Symbol = 61454;
+            this.uiSymbolButton_CheckUpdate.SymbolSize = 28;
+            this.uiSymbolButton_CheckUpdate.TabIndex = 8;
+            this.uiSymbolButton_CheckUpdate.Text = "检查更新";
+            this.uiSymbolButton_CheckUpdate.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_CheckUpdate.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiSymbolButton_CheckUpdate.Click += new System.EventHandler(this.uiSymbolButton_CheckUpdate_Click);
+            // 
+            // uiSymbolButton_SourceAddress
+            // 
+            this.uiSymbolButton_SourceAddress.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiSymbolButton_SourceAddress.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_SourceAddress.Location = new System.Drawing.Point(260, 203);
+            this.uiSymbolButton_SourceAddress.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiSymbolButton_SourceAddress.Name = "uiSymbolButton_SourceAddress";
+            this.uiSymbolButton_SourceAddress.Size = new System.Drawing.Size(142, 48);
+            this.uiSymbolButton_SourceAddress.Symbol = 61595;
+            this.uiSymbolButton_SourceAddress.SymbolSize = 28;
+            this.uiSymbolButton_SourceAddress.TabIndex = 7;
+            this.uiSymbolButton_SourceAddress.Text = "开源地址";
+            this.uiSymbolButton_SourceAddress.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_SourceAddress.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiSymbolButton_SourceAddress.Click += new System.EventHandler(this.uiSymbolButton_SourceAddress_Click);
+            // 
+            // uiSymbolButton_ProjectPage
+            // 
+            this.uiSymbolButton_ProjectPage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiSymbolButton_ProjectPage.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_ProjectPage.Location = new System.Drawing.Point(112, 203);
+            this.uiSymbolButton_ProjectPage.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiSymbolButton_ProjectPage.Name = "uiSymbolButton_ProjectPage";
+            this.uiSymbolButton_ProjectPage.Size = new System.Drawing.Size(142, 48);
+            this.uiSymbolButton_ProjectPage.Symbol = 62056;
+            this.uiSymbolButton_ProjectPage.SymbolSize = 28;
+            this.uiSymbolButton_ProjectPage.TabIndex = 6;
+            this.uiSymbolButton_ProjectPage.Text = "项目页面";
+            this.uiSymbolButton_ProjectPage.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_ProjectPage.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiSymbolButton_ProjectPage.Click += new System.EventHandler(this.uiSymbolButton_ProjectPage_Click);
+            // 
             // uiSmoothLabel1
             // 
             this.uiSmoothLabel1.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -772,7 +820,7 @@
             // 
             // timer_NetChecker
             // 
-            this.timer_NetChecker.Interval = 6000;
+            this.timer_NetChecker.Interval = 3000;
             this.timer_NetChecker.Tick += new System.EventHandler(this.timer_NetChecker_Tick);
             // 
             // uiToolTip1
@@ -841,54 +889,6 @@
             this.退出软件ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
             this.退出软件ToolStripMenuItem.Text = "退出软件";
             this.退出软件ToolStripMenuItem.Click += new System.EventHandler(this.退出软件ToolStripMenuItem_Click);
-            // 
-            // uiSymbolButton_ProjectPage
-            // 
-            this.uiSymbolButton_ProjectPage.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiSymbolButton_ProjectPage.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiSymbolButton_ProjectPage.Location = new System.Drawing.Point(112, 203);
-            this.uiSymbolButton_ProjectPage.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiSymbolButton_ProjectPage.Name = "uiSymbolButton_ProjectPage";
-            this.uiSymbolButton_ProjectPage.Size = new System.Drawing.Size(142, 48);
-            this.uiSymbolButton_ProjectPage.Symbol = 62056;
-            this.uiSymbolButton_ProjectPage.SymbolSize = 28;
-            this.uiSymbolButton_ProjectPage.TabIndex = 6;
-            this.uiSymbolButton_ProjectPage.Text = "项目页面";
-            this.uiSymbolButton_ProjectPage.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiSymbolButton_ProjectPage.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
-            this.uiSymbolButton_ProjectPage.Click += new System.EventHandler(this.uiSymbolButton_ProjectPage_Click);
-            // 
-            // uiSymbolButton_SourceAddress
-            // 
-            this.uiSymbolButton_SourceAddress.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiSymbolButton_SourceAddress.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiSymbolButton_SourceAddress.Location = new System.Drawing.Point(260, 203);
-            this.uiSymbolButton_SourceAddress.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiSymbolButton_SourceAddress.Name = "uiSymbolButton_SourceAddress";
-            this.uiSymbolButton_SourceAddress.Size = new System.Drawing.Size(142, 48);
-            this.uiSymbolButton_SourceAddress.Symbol = 61595;
-            this.uiSymbolButton_SourceAddress.SymbolSize = 28;
-            this.uiSymbolButton_SourceAddress.TabIndex = 7;
-            this.uiSymbolButton_SourceAddress.Text = "开源地址";
-            this.uiSymbolButton_SourceAddress.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiSymbolButton_SourceAddress.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
-            this.uiSymbolButton_SourceAddress.Click += new System.EventHandler(this.uiSymbolButton_SourceAddress_Click);
-            // 
-            // uiSymbolButton_CheckUpdate
-            // 
-            this.uiSymbolButton_CheckUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiSymbolButton_CheckUpdate.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiSymbolButton_CheckUpdate.Location = new System.Drawing.Point(412, 203);
-            this.uiSymbolButton_CheckUpdate.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiSymbolButton_CheckUpdate.Name = "uiSymbolButton_CheckUpdate";
-            this.uiSymbolButton_CheckUpdate.Size = new System.Drawing.Size(142, 48);
-            this.uiSymbolButton_CheckUpdate.Symbol = 61454;
-            this.uiSymbolButton_CheckUpdate.SymbolSize = 28;
-            this.uiSymbolButton_CheckUpdate.TabIndex = 8;
-            this.uiSymbolButton_CheckUpdate.Text = "检查更新";
-            this.uiSymbolButton_CheckUpdate.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiSymbolButton_CheckUpdate.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
-            this.uiSymbolButton_CheckUpdate.Click += new System.EventHandler(this.uiSymbolButton_CheckUpdate_Click);
             // 
             // MainForm
             // 

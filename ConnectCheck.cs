@@ -75,7 +75,7 @@ namespace AutoDialUp
             Ping ping = new Ping();
             try
             {
-                PingReply pr = ping.Send(strNetAdd, 3000);
+                PingReply pr = ping.Send(strNetAdd, 1500);
                 if (pr.Status == IPStatus.TimedOut)
                 {
                     Flage = false;
