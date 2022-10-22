@@ -36,8 +36,8 @@ namespace AutoDialUp
         /// <summary>
         /// PPPoE拨号方式断开连接
         /// </summary>
-        /// <param name="Name"></param>
-        /// <returns></returns>
+        /// <param name="Name">宽带名称</param>
+        /// <returns>成功返回1，失败返回0</returns>
         public static int DisConnect(string Name)
         {
             Process p = new Process();//新建一个进程对象

@@ -24,6 +24,7 @@ namespace AutoDialUp
     {
         RASDisplay ras = new RASDisplay();
         DialUpAccount savedaccount = new DialUpAccount();
+        HotKeyConfig hotkeyconfig = new HotKeyConfig();
         SoftwareConfig softwareConfig = null;
         int _autoConnectTimerLocker = -1;
         int _autoReConnectFlag = -1;//0是未联网，1是已联网
@@ -39,6 +40,10 @@ namespace AutoDialUp
             Aside.CreateChildNode(parent, "热键", 361957, 12, ++pageIndex);
             parent = Aside.CreateNode("关于", 61638, 30, ++pageIndex);
             tabControl.Region = new Region(new RectangleF(tabPage_Status.Left, tabPage_Status.Top + 5, tabPage_Status.Width, tabPage_Status.Height + 5)); //隐藏tabcontrol的选项卡
+            RegisterHotKey(Sunny.UI.ModifierKeys.None,Keys.Escape);
+            RegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F5);
+            RegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F7);
+            RegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F8);
             Thread netCheckThread = new Thread(() =>
             {
                 switch (GetInternetConStatus.GetNetConStatus("baidu.com"))//GetInternetConStatus.GetNetConStatus("baidu.com")
@@ -211,6 +216,16 @@ namespace AutoDialUp
                         uiSymbolLabe_AccountConfigCheck.Text = "软件配置不存在";
                     }
                     _autoConnectTimerLocker = 0;//时钟检测到值的变化后不进行自动连接
+                }
+                //热键配置文件是独立检查的
+                if(File.Exists(@"HotKey.json") == true)
+                {
+                    hotkeyconfig = JsonConvert.DeserializeObject<HotKeyConfig>(File.ReadAllText(@"HotKey.json", Encoding.UTF8));
+                    uiCheckBox_HotKey_Esc.Checked = hotkeyconfig.Esc ==1 ? true : false;
+                    uiCheckBox_HotKey_ShiftF5.Checked = hotkeyconfig.ShiftF5 == 1 ? true : false;
+                    uiCheckBox_HotKey_ShiftF6.Checked = hotkeyconfig.ShiftF6 == 1 ? true : false;
+                    uiCheckBox_HotKey_ShiftF7.Checked = hotkeyconfig.ShiftF7 == 1 ? true : false;
+                    uiCheckBox_HotKey_ShiftF8.Checked = hotkeyconfig.ShiftF8 == 1 ? true : false;
                 }
             });
             configCheckThread.Start();
@@ -822,6 +837,11 @@ namespace AutoDialUp
                 notifyIcon_MainForm.Visible = true;
                 //隐藏Alt+Tab中的窗口
                 this.Visible = false;
+                //卸载掉注册的热键
+                UnRegisterHotKey(Sunny.UI.ModifierKeys.None, Keys.Escape);
+                UnRegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F5);
+                UnRegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F7);
+                UnRegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F8);
                 //更改Text为最小化运行中
                 this.notifyIcon_MainForm.Text = "自动拨号器 - 后台运行中";
                 软件状态ToolStripMenuItem.Text = "自动拨号器 - 后台运行中";//托盘菜单中的软件状态
@@ -848,6 +868,11 @@ namespace AutoDialUp
                     this.ShowInTaskbar = true;
                     //显示Alt+Tab中的窗口
                     this.Visible = true;
+                    //重新注册需要的热键
+                    RegisterHotKey(Sunny.UI.ModifierKeys.None, Keys.Escape);
+                    RegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F5);
+                    RegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F7);
+                    RegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F8);
                     //更改Text为运行中
                     this.notifyIcon_MainForm.Text = "自动拨号器 - 运行中";
                     软件状态ToolStripMenuItem.Text = "自动拨号器 - 运行中";//托盘菜单中的软件状态
@@ -890,6 +915,148 @@ namespace AutoDialUp
         private void uiSymbolButton_CheckUpdate_Click(object sender, EventArgs e)
         {
             Process.Start("https://xn--e-5g8az75bbi3a.com/%E9%A1%B9%E7%9B%AE%E5%8F%91%E5%B8%83/10.html");
+        }
+
+        /// <summary>
+        /// 窗口热键事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_HotKeyEventHandler(object sender, HotKeyEventArgs e)
+        {
+            //Shift+F5 重启软件
+            if (e.hotKey.ModifierKey == Sunny.UI.ModifierKeys.Shift && e.hotKey.Key == Keys.F5)
+            {
+                if(uiCheckBox_HotKey_ShiftF5.Checked == true)
+                {
+                    notifyIcon_MainForm.Dispose();
+                    Application.Exit();
+                    Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                }
+            }
+            //Shift+F6 重新拨号换IP
+            if(e.hotKey.ModifierKey == Sunny.UI.ModifierKeys.Shift && e.hotKey.Key == Keys.F6)
+            {
+                if(uiCheckBox_HotKey_ShiftF6.Checked == true)
+                {
+                    if (PPPoE.DisConnect(Decrypt.DES(savedaccount.Name, "latiaonb")) == 1)
+                    {
+                        Thread.Sleep(1000);
+                        if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Name, "latiaonb")) == 1)
+                            Toast.ShowNotifiy("重新拨号换IP", "已成功重新拨号换IP", Notifications.Wpf.NotificationType.Success);
+                        else
+                            Toast.ShowNotifiy("重新拨号换IP", "由于拨号连接失败，未能更换IP", Notifications.Wpf.NotificationType.Error);
+                    }
+                    else
+                        Toast.ShowNotifiy("重新拨号换IP", "由于断开当前拨号连接失败，未能更换IP", Notifications.Wpf.NotificationType.Error);
+                }
+            }
+            //Shift+F7 一键连接
+            if (e.hotKey.ModifierKey == Sunny.UI.ModifierKeys.Shift && e.hotKey.Key == Keys.F7)
+            {
+                if(uiCheckBox_HotKey_ShiftF7.Checked == true)
+                    uiSymbolButton_OneKeyConnect_Click(new object(), new EventArgs());
+            }
+            //Shift+F8 断开拨号
+            if (e.hotKey.ModifierKey == Sunny.UI.ModifierKeys.Shift && e.hotKey.Key == Keys.F8)
+            {
+                if(uiCheckBox_HotKey_ShiftF8.Checked == true)
+                {
+                    if (savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败")
+                    {
+                        if (PPPoE.DisConnect(Decrypt.DES(savedaccount.Name, "latiaonb")) == 1)
+                        {
+                            Toast.ShowNotifiy("断开拨号", "已成功断开拨号连接，请注意如果开启断网自动重连功能，6秒后会自动重连", Notifications.Wpf.NotificationType.Warning);
+                        }
+                    }
+                }
+            }
+            //Esc 退出软件
+            if (e.hotKey.Key == Keys.Escape)
+            {
+                if(uiCheckBox_HotKey_Esc.Checked == true)
+                {
+                    notifyIcon_MainForm.Dispose();
+                    Application.Exit();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Shift+F6更换IP旁的提示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void uiSymbolButton_HotKey_ChangeIPHelp_Click(object sender, EventArgs e)
+        {
+            UIMessageDialog.ShowMessageDialog("为了更换IP保证效率，操作时尽量不做任何检查。\n故：不会检查账号配置文件是否存在，且一定要在已经拨号连接上网络的情况下使用此功能，否则软件一定会出现各类无法预料的致命错误！！","更换IP帮助",false,Style);
+        }
+
+        /// <summary>
+        /// 保存热键设置配置文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void uiSymbolButton_SaveHotKeyConfig_Click(object sender, EventArgs e)
+        {
+            if(!(uiCheckBox_HotKey_ShiftF5.Checked == false && uiCheckBox_HotKey_ShiftF6.Checked == false && uiCheckBox_HotKey_ShiftF7.Checked == false && uiCheckBox_HotKey_ShiftF8.Checked == false && uiCheckBox_HotKey_Esc.Checked == false))
+            {
+                if (File.Exists(@"HotKey.json") == false)
+                {
+                    HotKeyConfig newHotKeyConfig = new HotKeyConfig()
+                    {
+                        Esc = uiCheckBox_HotKey_Esc.Checked == true ? 1 : 0,
+                        ShiftF5 = uiCheckBox_HotKey_ShiftF5.Checked == true ? 1 : 0,
+                        ShiftF6 = uiCheckBox_HotKey_ShiftF6.Checked == true ? 1 : 0,
+                        ShiftF7 = uiCheckBox_HotKey_ShiftF7.Checked == true ? 1 : 0,
+                        ShiftF8 = uiCheckBox_HotKey_ShiftF8.Checked == true ? 1 : 0,
+                    };
+                    string json = JsonConvert.SerializeObject(newHotKeyConfig);
+                    try
+                    {
+                        File.WriteAllText(@"HotKey.json", json);
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowErrorDialog("异常捕获", string.Format("保存热键配置文件失败\n异常消息:\n{0}\n异常跟踪：\n{1}", ex.Message, ex.Source));
+                    }
+                    finally
+                    {
+                        UIMessageDialog.ShowMessageDialog("热键配置文件已保存完毕", "提示", false, Style);
+                    }
+                }
+                else
+                {
+                    if (ShowAskDialog("热键配置文件已经存在，是否需要以当前配置覆盖旧的账号配置？\n如果覆盖，旧的配置将永久失去"))
+                    {
+                        HotKeyConfig newHotKeyConfig = new HotKeyConfig()
+                        {
+                            Esc = uiCheckBox_HotKey_Esc.Checked == true ? 1 : 0,
+                            ShiftF5 = uiCheckBox_HotKey_ShiftF5.Checked == true ? 1 : 0,
+                            ShiftF6 = uiCheckBox_HotKey_ShiftF6.Checked == true ? 1 : 0,
+                            ShiftF7 = uiCheckBox_HotKey_ShiftF7.Checked == true ? 1 : 0,
+                            ShiftF8 = uiCheckBox_HotKey_ShiftF8.Checked == true ? 1 : 0,
+                        };
+                        string json = JsonConvert.SerializeObject(newHotKeyConfig);
+                        try
+                        {
+                            File.WriteAllText(@"HotKey.json", json);
+                        }
+                        catch (Exception ex)
+                        {
+                            ShowErrorDialog("异常捕获", string.Format("保存热键配置文件失败\n异常消息:\n{0}\n异常跟踪：\n{1}", ex.Message, ex.Source));
+                        }
+                        finally
+                        {
+                            UIMessageDialog.ShowMessageDialog("热键配置文件已保存完毕", "提示", false, Style);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ShowErrorDialog("错误", "由于未选择任何热键设置，无需保存");
+            }
         }
     }
 }

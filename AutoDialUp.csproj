@@ -79,6 +79,7 @@
     <Compile Include="Crypt\Decrypt.cs" />
     <Compile Include="Crypt\Encrypt.cs" />
     <Compile Include="Data\Account.cs" />
+    <Compile Include="Data\HotKey.cs" />
     <Compile Include="Data\Software.cs" />
     <Compile Include="DialUp\ADSL.cs" />
     <Compile Include="ConnectCheck.cs" />

@@ -69,6 +69,13 @@
             this.uiMarkLabel1 = new Sunny.UI.UIMarkLabel();
             this.uiLine2 = new Sunny.UI.UILine();
             this.tabPage_HotKey = new System.Windows.Forms.TabPage();
+            this.uiSymbolButton_HotKey_ChangeIPHelp = new Sunny.UI.UISymbolButton();
+            this.uiSymbolButton_SaveHotKeyConfig = new Sunny.UI.UISymbolButton();
+            this.uiCheckBox_HotKey_ShiftF8 = new Sunny.UI.UICheckBox();
+            this.uiCheckBox_HotKey_ShiftF7 = new Sunny.UI.UICheckBox();
+            this.uiCheckBox_HotKey_ShiftF6 = new Sunny.UI.UICheckBox();
+            this.uiCheckBox_HotKey_ShiftF5 = new Sunny.UI.UICheckBox();
+            this.uiCheckBox_HotKey_Esc = new Sunny.UI.UICheckBox();
             this.tabPage_About = new System.Windows.Forms.TabPage();
             this.uiSymbolButton_CheckUpdate = new Sunny.UI.UISymbolButton();
             this.uiSymbolButton_SourceAddress = new Sunny.UI.UISymbolButton();
@@ -96,6 +103,7 @@
             this.uiTitlePanel_NetStatus.SuspendLayout();
             this.tabPage_AccountConfig.SuspendLayout();
             this.tabPage_SoftwareConfig.SuspendLayout();
+            this.tabPage_HotKey.SuspendLayout();
             this.tabPage_About.SuspendLayout();
             this.contextMenuStrip_Main.SuspendLayout();
             this.SuspendLayout();
@@ -678,12 +686,116 @@
             // 
             // tabPage_HotKey
             // 
+            this.tabPage_HotKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.tabPage_HotKey.Controls.Add(this.uiSymbolButton_HotKey_ChangeIPHelp);
+            this.tabPage_HotKey.Controls.Add(this.uiSymbolButton_SaveHotKeyConfig);
+            this.tabPage_HotKey.Controls.Add(this.uiCheckBox_HotKey_ShiftF8);
+            this.tabPage_HotKey.Controls.Add(this.uiCheckBox_HotKey_ShiftF7);
+            this.tabPage_HotKey.Controls.Add(this.uiCheckBox_HotKey_ShiftF6);
+            this.tabPage_HotKey.Controls.Add(this.uiCheckBox_HotKey_ShiftF5);
+            this.tabPage_HotKey.Controls.Add(this.uiCheckBox_HotKey_Esc);
             this.tabPage_HotKey.Location = new System.Drawing.Point(4, 40);
             this.tabPage_HotKey.Name = "tabPage_HotKey";
             this.tabPage_HotKey.Size = new System.Drawing.Size(623, 385);
             this.tabPage_HotKey.TabIndex = 4;
             this.tabPage_HotKey.Text = "热键设置";
-            this.tabPage_HotKey.UseVisualStyleBackColor = true;
+            // 
+            // uiSymbolButton_HotKey_ChangeIPHelp
+            // 
+            this.uiSymbolButton_HotKey_ChangeIPHelp.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiSymbolButton_HotKey_ChangeIPHelp.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_HotKey_ChangeIPHelp.Location = new System.Drawing.Point(416, 122);
+            this.uiSymbolButton_HotKey_ChangeIPHelp.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiSymbolButton_HotKey_ChangeIPHelp.Name = "uiSymbolButton_HotKey_ChangeIPHelp";
+            this.uiSymbolButton_HotKey_ChangeIPHelp.Size = new System.Drawing.Size(38, 35);
+            this.uiSymbolButton_HotKey_ChangeIPHelp.Symbol = 61546;
+            this.uiSymbolButton_HotKey_ChangeIPHelp.SymbolSize = 28;
+            this.uiSymbolButton_HotKey_ChangeIPHelp.TabIndex = 12;
+            this.uiSymbolButton_HotKey_ChangeIPHelp.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_HotKey_ChangeIPHelp.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiSymbolButton_HotKey_ChangeIPHelp.Click += new System.EventHandler(this.uiSymbolButton_HotKey_ChangeIPHelp_Click);
+            // 
+            // uiSymbolButton_SaveHotKeyConfig
+            // 
+            this.uiSymbolButton_SaveHotKeyConfig.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiSymbolButton_SaveHotKeyConfig.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_SaveHotKeyConfig.Location = new System.Drawing.Point(153, 290);
+            this.uiSymbolButton_SaveHotKeyConfig.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiSymbolButton_SaveHotKeyConfig.Name = "uiSymbolButton_SaveHotKeyConfig";
+            this.uiSymbolButton_SaveHotKeyConfig.Size = new System.Drawing.Size(297, 55);
+            this.uiSymbolButton_SaveHotKeyConfig.Symbol = 61639;
+            this.uiSymbolButton_SaveHotKeyConfig.SymbolOffset = new System.Drawing.Point(-10, 0);
+            this.uiSymbolButton_SaveHotKeyConfig.SymbolSize = 30;
+            this.uiSymbolButton_SaveHotKeyConfig.TabIndex = 11;
+            this.uiSymbolButton_SaveHotKeyConfig.Text = "保存配置";
+            this.uiSymbolButton_SaveHotKeyConfig.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_SaveHotKeyConfig.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiSymbolButton_SaveHotKeyConfig.Click += new System.EventHandler(this.uiSymbolButton_SaveHotKeyConfig_Click);
+            // 
+            // uiCheckBox_HotKey_ShiftF8
+            // 
+            this.uiCheckBox_HotKey_ShiftF8.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiCheckBox_HotKey_ShiftF8.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiCheckBox_HotKey_ShiftF8.Location = new System.Drawing.Point(153, 243);
+            this.uiCheckBox_HotKey_ShiftF8.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiCheckBox_HotKey_ShiftF8.Name = "uiCheckBox_HotKey_ShiftF8";
+            this.uiCheckBox_HotKey_ShiftF8.Padding = new System.Windows.Forms.Padding(22, 0, 0, 0);
+            this.uiCheckBox_HotKey_ShiftF8.Size = new System.Drawing.Size(331, 29);
+            this.uiCheckBox_HotKey_ShiftF8.TabIndex = 4;
+            this.uiCheckBox_HotKey_ShiftF8.Text = "Shift+F8 断开当前拨号连接";
+            this.uiCheckBox_HotKey_ShiftF8.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiCheckBox_HotKey_ShiftF7
+            // 
+            this.uiCheckBox_HotKey_ShiftF7.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiCheckBox_HotKey_ShiftF7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiCheckBox_HotKey_ShiftF7.Location = new System.Drawing.Point(153, 185);
+            this.uiCheckBox_HotKey_ShiftF7.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiCheckBox_HotKey_ShiftF7.Name = "uiCheckBox_HotKey_ShiftF7";
+            this.uiCheckBox_HotKey_ShiftF7.Padding = new System.Windows.Forms.Padding(22, 0, 0, 0);
+            this.uiCheckBox_HotKey_ShiftF7.Size = new System.Drawing.Size(297, 29);
+            this.uiCheckBox_HotKey_ShiftF7.TabIndex = 3;
+            this.uiCheckBox_HotKey_ShiftF7.Text = "Shift+F7 一键拨号连接";
+            this.uiCheckBox_HotKey_ShiftF7.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiCheckBox_HotKey_ShiftF6
+            // 
+            this.uiCheckBox_HotKey_ShiftF6.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiCheckBox_HotKey_ShiftF6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiCheckBox_HotKey_ShiftF6.Location = new System.Drawing.Point(153, 127);
+            this.uiCheckBox_HotKey_ShiftF6.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiCheckBox_HotKey_ShiftF6.Name = "uiCheckBox_HotKey_ShiftF6";
+            this.uiCheckBox_HotKey_ShiftF6.Padding = new System.Windows.Forms.Padding(22, 0, 0, 0);
+            this.uiCheckBox_HotKey_ShiftF6.Size = new System.Drawing.Size(313, 29);
+            this.uiCheckBox_HotKey_ShiftF6.TabIndex = 2;
+            this.uiCheckBox_HotKey_ShiftF6.Text = "Shift+F6 重新拨号更换IP";
+            this.uiCheckBox_HotKey_ShiftF6.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiCheckBox_HotKey_ShiftF5
+            // 
+            this.uiCheckBox_HotKey_ShiftF5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiCheckBox_HotKey_ShiftF5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiCheckBox_HotKey_ShiftF5.Location = new System.Drawing.Point(153, 69);
+            this.uiCheckBox_HotKey_ShiftF5.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiCheckBox_HotKey_ShiftF5.Name = "uiCheckBox_HotKey_ShiftF5";
+            this.uiCheckBox_HotKey_ShiftF5.Padding = new System.Windows.Forms.Padding(22, 0, 0, 0);
+            this.uiCheckBox_HotKey_ShiftF5.Size = new System.Drawing.Size(280, 29);
+            this.uiCheckBox_HotKey_ShiftF5.TabIndex = 1;
+            this.uiCheckBox_HotKey_ShiftF5.Text = "Shift+F5 快速重启软件";
+            this.uiCheckBox_HotKey_ShiftF5.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiCheckBox_HotKey_Esc
+            // 
+            this.uiCheckBox_HotKey_Esc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiCheckBox_HotKey_Esc.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiCheckBox_HotKey_Esc.Location = new System.Drawing.Point(153, 11);
+            this.uiCheckBox_HotKey_Esc.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiCheckBox_HotKey_Esc.Name = "uiCheckBox_HotKey_Esc";
+            this.uiCheckBox_HotKey_Esc.Padding = new System.Windows.Forms.Padding(22, 0, 0, 0);
+            this.uiCheckBox_HotKey_Esc.Size = new System.Drawing.Size(177, 29);
+            this.uiCheckBox_HotKey_Esc.TabIndex = 0;
+            this.uiCheckBox_HotKey_Esc.Text = "Esc 退出软件";
+            this.uiCheckBox_HotKey_Esc.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
             // tabPage_About
             // 
@@ -902,8 +1014,9 @@
             this.IsForbidAltF4 = true;
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "自动拨号上网 - e剑终情.com";
+            this.Text = "易拨 - e剑终情.com";
             this.ZoomScaleRect = new System.Drawing.Rectangle(22, 22, 720, 591);
+            this.HotKeyEventHandler += new Sunny.UI.HotKeyEventHandler(this.MainForm_HotKeyEventHandler);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             this.tabControl.ResumeLayout(false);
@@ -913,6 +1026,7 @@
             this.uiTitlePanel_NetStatus.ResumeLayout(false);
             this.tabPage_AccountConfig.ResumeLayout(false);
             this.tabPage_SoftwareConfig.ResumeLayout(false);
+            this.tabPage_HotKey.ResumeLayout(false);
             this.tabPage_About.ResumeLayout(false);
             this.contextMenuStrip_Main.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -980,6 +1094,13 @@
         private Sunny.UI.UISymbolButton uiSymbolButton_CheckUpdate;
         private Sunny.UI.UISymbolButton uiSymbolButton_SourceAddress;
         private Sunny.UI.UISymbolButton uiSymbolButton_ProjectPage;
+        private Sunny.UI.UICheckBox uiCheckBox_HotKey_ShiftF6;
+        private Sunny.UI.UICheckBox uiCheckBox_HotKey_ShiftF5;
+        private Sunny.UI.UICheckBox uiCheckBox_HotKey_Esc;
+        private Sunny.UI.UICheckBox uiCheckBox_HotKey_ShiftF8;
+        private Sunny.UI.UICheckBox uiCheckBox_HotKey_ShiftF7;
+        private Sunny.UI.UISymbolButton uiSymbolButton_SaveHotKeyConfig;
+        private Sunny.UI.UISymbolButton uiSymbolButton_HotKey_ChangeIPHelp;
     }
 }
 
