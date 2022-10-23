@@ -96,6 +96,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.一键连接ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出软件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPage_Log = new System.Windows.Forms.TabPage();
+            this.uiRichTextBox_Log = new Sunny.UI.UIRichTextBox();
             this.tabControl.SuspendLayout();
             this.tabPage_Status.SuspendLayout();
             this.uiTitlePanel3.SuspendLayout();
@@ -106,6 +108,7 @@
             this.tabPage_HotKey.SuspendLayout();
             this.tabPage_About.SuspendLayout();
             this.contextMenuStrip_Main.SuspendLayout();
+            this.tabPage_Log.SuspendLayout();
             this.SuspendLayout();
             // 
             // uiStyleManager
@@ -135,6 +138,7 @@
             this.tabControl.Controls.Add(this.tabPage_AccountConfig);
             this.tabControl.Controls.Add(this.tabPage_SoftwareConfig);
             this.tabControl.Controls.Add(this.tabPage_HotKey);
+            this.tabControl.Controls.Add(this.tabPage_Log);
             this.tabControl.Controls.Add(this.tabPage_About);
             this.tabControl.Location = new System.Drawing.Point(134, 36);
             this.tabControl.Name = "tabControl";
@@ -406,7 +410,7 @@
             this.tabPage_AccountConfig.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage_AccountConfig.Size = new System.Drawing.Size(623, 385);
             this.tabPage_AccountConfig.TabIndex = 1;
-            this.tabPage_AccountConfig.Text = "拨号设置";
+            this.tabPage_AccountConfig.Text = "拨号";
             // 
             // uiSymbolButton_AccountHelp
             // 
@@ -541,7 +545,7 @@
             this.tabPage_SoftwareConfig.Name = "tabPage_SoftwareConfig";
             this.tabPage_SoftwareConfig.Size = new System.Drawing.Size(623, 385);
             this.tabPage_SoftwareConfig.TabIndex = 3;
-            this.tabPage_SoftwareConfig.Text = "软件设置";
+            this.tabPage_SoftwareConfig.Text = "软件";
             // 
             // uiSymbolButton_SaveSoftwareConfig
             // 
@@ -698,7 +702,7 @@
             this.tabPage_HotKey.Name = "tabPage_HotKey";
             this.tabPage_HotKey.Size = new System.Drawing.Size(623, 385);
             this.tabPage_HotKey.TabIndex = 4;
-            this.tabPage_HotKey.Text = "热键设置";
+            this.tabPage_HotKey.Text = "热键";
             // 
             // uiSymbolButton_HotKey_ChangeIPHelp
             // 
@@ -1002,6 +1006,32 @@
             this.退出软件ToolStripMenuItem.Text = "退出软件";
             this.退出软件ToolStripMenuItem.Click += new System.EventHandler(this.退出软件ToolStripMenuItem_Click);
             // 
+            // tabPage_Log
+            // 
+            this.tabPage_Log.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.tabPage_Log.Controls.Add(this.uiRichTextBox_Log);
+            this.tabPage_Log.Location = new System.Drawing.Point(4, 40);
+            this.tabPage_Log.Name = "tabPage_Log";
+            this.tabPage_Log.Size = new System.Drawing.Size(623, 385);
+            this.tabPage_Log.TabIndex = 5;
+            this.tabPage_Log.Text = "日志";
+            // 
+            // uiRichTextBox_Log
+            // 
+            this.uiRichTextBox_Log.FillColor = System.Drawing.Color.White;
+            this.uiRichTextBox_Log.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiRichTextBox_Log.Location = new System.Drawing.Point(11, 19);
+            this.uiRichTextBox_Log.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiRichTextBox_Log.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiRichTextBox_Log.Name = "uiRichTextBox_Log";
+            this.uiRichTextBox_Log.Padding = new System.Windows.Forms.Padding(2);
+            this.uiRichTextBox_Log.ReadOnly = true;
+            this.uiRichTextBox_Log.ShowText = false;
+            this.uiRichTextBox_Log.Size = new System.Drawing.Size(602, 356);
+            this.uiRichTextBox_Log.TabIndex = 0;
+            this.uiRichTextBox_Log.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.uiRichTextBox_Log.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1029,6 +1059,7 @@
             this.tabPage_HotKey.ResumeLayout(false);
             this.tabPage_About.ResumeLayout(false);
             this.contextMenuStrip_Main.ResumeLayout(false);
+            this.tabPage_Log.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1101,6 +1132,8 @@
         private Sunny.UI.UICheckBox uiCheckBox_HotKey_ShiftF7;
         private Sunny.UI.UISymbolButton uiSymbolButton_SaveHotKeyConfig;
         private Sunny.UI.UISymbolButton uiSymbolButton_HotKey_ChangeIPHelp;
+        private System.Windows.Forms.TabPage tabPage_Log;
+        private Sunny.UI.UIRichTextBox uiRichTextBox_Log;
     }
 }
 

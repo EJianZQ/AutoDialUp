@@ -17,9 +17,17 @@ using AutoDialUp.Crypt;
 using Newtonsoft.Json;
 using Application = System.Windows.Forms.Application;
 using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AutoDialUp
 {
+    public enum CustomColor
+    {
+        Success,
+        Information,
+        Worring,
+        Error
+    }
     public partial class MainForm : UIForm
     {
         RASDisplay ras = new RASDisplay();
@@ -28,6 +36,7 @@ namespace AutoDialUp
         SoftwareConfig softwareConfig = null;
         int _autoConnectTimerLocker = -1;
         int _autoReConnectFlag = -1;//0是未联网，1是已联网
+
         public MainForm()
         {
             InitializeComponent();
@@ -38,6 +47,7 @@ namespace AutoDialUp
             Aside.CreateChildNode(parent,"拨号", 61612,12, ++pageIndex);
             Aside.CreateChildNode(parent, "自动化", 61904, 12, ++pageIndex);
             Aside.CreateChildNode(parent, "热键", 361957, 12, ++pageIndex);
+            parent = Aside.CreateNode("日志", 61747, 30, ++pageIndex);
             parent = Aside.CreateNode("关于", 61638, 30, ++pageIndex);
             tabControl.Region = new Region(new RectangleF(tabPage_Status.Left, tabPage_Status.Top + 5, tabPage_Status.Width, tabPage_Status.Height + 5)); //隐藏tabcontrol的选项卡
             RegisterHotKey(Sunny.UI.ModifierKeys.None,Keys.Escape);
@@ -67,6 +77,7 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "上网类型未知";
                             uiSymbolLabel_PingOK.Text = "Ping失败";
                             _autoReConnectFlag = 0;
+                            LogAppend(CustomColor.Error, "[线程检测网络]网络未连接 - 1");
                             break;
                         }
                     case 2: 
@@ -88,6 +99,7 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "调制解调器上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
                             _autoReConnectFlag = 1;
+                            LogAppend(CustomColor.Success, "[线程检测网络]网络已连接 - 2");
                             break;
                         }
                     case 3:
@@ -109,6 +121,7 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "使用网卡上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
                             _autoReConnectFlag = 1;
+                            LogAppend(CustomColor.Success, "[线程检测网络]网络已连接 - 3");
                             break;
                         }
                         case 4:
@@ -130,6 +143,7 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "调制解调器上网";
                             uiSymbolLabel_PingOK.Text = "Ping失败";
                             _autoReConnectFlag = 0;
+                            LogAppend(CustomColor.Error, "[线程检测网络]网络未连接 - 4");
                             break;
                         }
                     case 5:
@@ -151,6 +165,7 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "使用网卡上网";
                             uiSymbolLabel_PingOK.Text = "Ping失败";
                             _autoReConnectFlag = 0;
+                            LogAppend(CustomColor.Error, "[线程检测网络]网络未连接 - 5");
                             break;
                         }
                 }
@@ -168,6 +183,7 @@ namespace AutoDialUp
                     uiTextBox_DialUpPassword.Watermark = Decrypt.DES(savedaccount.Password, "latiaonb");
                     uiComboBox_DialUpType.SelectedIndex = uiComboBox_ConnectMethod.SelectedIndex = savedaccount.DialUpType;
                     uiSymbolButton_OneKeyConnect.Enabled = true;
+                    LogAppend(CustomColor.Success, "账号配置文件解析完毕");
                     if (File.Exists("Config.json") == true)
                     {
                         uiSymbolLabel_SoftConfigCheck.Text = "软件配置正常";
@@ -185,6 +201,7 @@ namespace AutoDialUp
                             uiCheckBox_AutoReConnect.Checked = true;
 
                         uiSymbolButton_ResetConfig.Enabled = true;//只有2个配置文件都存在才能重置
+                        LogAppend(CustomColor.Success, "软件配置文件解析完毕");
                     }
                     else
                     {
@@ -194,6 +211,7 @@ namespace AutoDialUp
                         uiSymbolLabel_SoftConfigCheck.SymbolColor = Color.DarkOrange;
                         uiSymbolLabel_SoftConfigCheck.Symbol = 61553;
                         uiSymbolLabel_SoftConfigCheck.Text = "软件配置不存在";
+                        LogAppend(CustomColor.Worring, "软件配置文件不存在");
                         _autoConnectTimerLocker = 0;//时钟检测到值的变化后不进行自动连接
                     }
                 }
@@ -206,6 +224,7 @@ namespace AutoDialUp
                     uiSymbolLabel_SoftConfigCheck.Symbol = 61553;
                     uiComboBox_ConnectMethod.SelectedIndex = 0;
                     uiSymbolLabel_SoftConfigCheck.Text = "拨号配置不存在";
+                    LogAppend(CustomColor.Worring, "拨号配置文件不存在");
                     if (File.Exists("Config.json") == false)
                     {
                         uiTitlePanel_Config.TitleColor = Color.DarkOrange;
@@ -214,6 +233,7 @@ namespace AutoDialUp
                         uiSymbolLabe_AccountConfigCheck.SymbolColor = Color.DarkOrange;
                         uiSymbolLabe_AccountConfigCheck.Symbol = 61553;
                         uiSymbolLabe_AccountConfigCheck.Text = "软件配置不存在";
+                        LogAppend(CustomColor.Worring, "软件配置文件不存在");
                     }
                     _autoConnectTimerLocker = 0;//时钟检测到值的变化后不进行自动连接
                 }
@@ -227,11 +247,54 @@ namespace AutoDialUp
                     uiCheckBox_HotKey_ShiftF7.Checked = hotkeyconfig.ShiftF7 == 1 ? true : false;
                     uiCheckBox_HotKey_ShiftF8.Checked = hotkeyconfig.ShiftF8 == 1 ? true : false;
                 }
+                else
+                    LogAppend(CustomColor.Worring, "热键配置文件不存在");
+                LogAppend(CustomColor.Success,"所有配置文件检查完毕");
             });
             configCheckThread.Start();
             timer_NetChecker.Enabled = true;
+            LogAppend(CustomColor.Information, "主窗口事件处理完毕");
         }
 
+        /// <summary>
+        /// 向日志框添加日志
+        /// </summary>
+        /// <param name="text"></param>
+        public void LogAppend(CustomColor customcolor,string text)
+        {
+            Color color = Color.Black;
+            switch (customcolor)
+            {
+                case CustomColor.Success:
+                    {
+                        color = Color.FromArgb(0, 139, 0);
+                        break; 
+                    }
+                case CustomColor.Information:
+                    {
+                        color = Color.FromArgb(0, 46, 166);
+                        break;
+                    }
+                case CustomColor.Worring:
+                    {
+                        color = Color.FromArgb(255, 119, 15);
+                        break;
+                    }
+                case CustomColor.Error:
+                    {
+                        color = Color.FromArgb(215, 0, 15);
+                        break;
+                    }
+            }
+            uiRichTextBox_Log.SelectionColor = color;
+            uiRichTextBox_Log.AppendText(string.Format("[{0:T}]:", DateTime.Now) + text + Environment.NewLine);
+            //内容过多时防止内存溢出自动清理
+            if (uiRichTextBox_Log.Text.Length >= 20000)
+            {
+                uiRichTextBox_Log.Text = String.Empty;
+                LogAppend(CustomColor.Information,"由于日志内容过多，防止软件崩溃已自动清理");
+            }
+        }
 
         /// <summary>
         /// 选项卡切换的实现
@@ -246,31 +309,43 @@ namespace AutoDialUp
                 case "TreeNode: 状态":
                     {
                         tabControl.SelectedIndex = 0;
+                        LogAppend(CustomColor.Information, "用户切换到了状态页面");
                         break;
                     }
                 case "TreeNode: 拨号":
                     {
                         tabControl.SelectedIndex = 1;
+                        LogAppend(CustomColor.Information, "用户切换到了拨号设置页面");
                         break;
                     }
                 case "TreeNode: 自动化":
                     {
                         tabControl.SelectedIndex = 2;
+                        LogAppend(CustomColor.Information, "用户切换到了自动化软件设置页面");
                         break;
                     }
                 case "TreeNode: 热键":
                     {
                         tabControl.SelectedIndex = 3;
+                        LogAppend(CustomColor.Information, "用户切换到了热键设置页面");
+                        break;
+                    }
+                case "TreeNode: 日志":
+                    {
+                        tabControl.SelectedIndex = 4;
+                        LogAppend(CustomColor.Information, "用户切换到了日志页面");
                         break;
                     }
                 case "TreeNode: 关于":
                     {
-                        tabControl.SelectedIndex = 4;
+                        tabControl.SelectedIndex = 5;
+                        LogAppend(CustomColor.Information, "用户切换到了关于页面");
                         break;
                     }
                 default:
                     {
                         tabControl.SelectedIndex = 0;
+                        LogAppend(CustomColor.Information, "用户切换到了未知页面，自动跳转到主页");
                         break;
                     }
             }
@@ -317,6 +392,7 @@ namespace AutoDialUp
                             catch(Exception ex)
                             {
                                 ShowErrorDialog("异常捕获", string.Format("保存账号配置文件失败\n异常消息:\n{0}\n异常跟踪：\n{1}",ex.Message,ex.Source));
+                                LogAppend(CustomColor.Error, "保存账号配置文件失败：写文件时异常");
                             }
                             finally
                             {
@@ -338,6 +414,7 @@ namespace AutoDialUp
                             catch (Exception ex)
                             {
                                 ShowErrorDialog("异常捕获", string.Format("保存账号配置文件失败\n异常消息:\n{0}\n异常跟踪：\n{1}", ex.Message, ex.Source));
+                                LogAppend(CustomColor.Error, "保存账号配置文件失败：写文件时异常");
                             }
                             finally
                             {
@@ -374,6 +451,7 @@ namespace AutoDialUp
                                 catch (Exception ex)
                                 {
                                     ShowErrorDialog("异常捕获", string.Format("保存账号配置文件失败\n异常消息:\n{0}\n异常跟踪：\n{1}", ex.Message, ex.Source));
+                                    LogAppend(CustomColor.Error, "保存账号配置文件失败：写文件时异常");
                                 }
                                 finally
                                 {
@@ -396,6 +474,7 @@ namespace AutoDialUp
                                 catch (Exception ex)
                                 {
                                     ShowErrorDialog("异常捕获", string.Format("保存账号配置文件失败\n异常消息:\n{0}\n异常跟踪：\n{1}", ex.Message, ex.Source));
+                                    LogAppend(CustomColor.Error, "保存账号配置文件失败：写文件时异常");
                                 }
                                 finally
                                 {
@@ -431,6 +510,7 @@ namespace AutoDialUp
                     if(tempNetChecker == 1 || tempNetChecker == 4 || tempNetChecker == 5)
                     {
                         uiProcessBar_ConectProcess.Visible = true;
+                        LogAppend(CustomColor.Information, "开始一键连接");
                         switch (uiComboBox_ConnectMethod.SelectedIndex)
                         {
                             case 0:
@@ -451,10 +531,12 @@ namespace AutoDialUp
                                     if (p.ExitCode == 0)//通过退出返回的代码判断连接是否成功
                                     {
                                         Toast.ShowNotifiy("一键连接", String.Format("状态:宽带连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
+                                        LogAppend(CustomColor.Information, "一键连接成功");
                                     }
                                     else
                                     {
                                         Toast.ShowNotifiy("一键连接", String.Format("状态:宽带连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
+                                        LogAppend(CustomColor.Error, "一键连接失败");
                                     }
                                     uiProcessBar_ConectProcess.Value = 100;
                                     uiProcessBar_ConectProcess.Visible = false;
@@ -474,11 +556,13 @@ namespace AutoDialUp
                 else
                 {
                     ShowErrorDialog("错误", "拨号账号配置文件解密失败，请重置后重试");
+                    LogAppend(CustomColor.Error, "一键连接失败：拨号账号配置文件解密失败");
                 }
             }
             else
             {
                 ShowErrorDialog("错误", "由于未选择拨号方式，连接网络失败\n请在选择拨号方式后重试");
+                LogAppend(CustomColor.Error, "一键连接失败：未选择拨号方式");
             }
             timer_AutoReConnect.Enabled = true;
         }
@@ -511,6 +595,7 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "上网类型未知";
                             uiSymbolLabel_PingOK.Text = "Ping失败";
                             _autoReConnectFlag = 0;
+                            LogAppend(CustomColor.Error, "[时钟检测网络]网络未连接 - 1");
                             break;
                         }
                     case 2:
@@ -532,6 +617,7 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "调制解调器上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
                             _autoReConnectFlag = 1;
+                            LogAppend(CustomColor.Success, "[时钟检测网络]网络已连接 - 2");
                             break;
                         }
                     case 3:
@@ -553,6 +639,7 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "使用网卡上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
                             _autoReConnectFlag = 1;
+                            LogAppend(CustomColor.Success, "[时钟检测网络]网络已连接 - 3");
                             break;
                         }
                     case 4:
@@ -574,6 +661,7 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "调制解调器上网";
                             uiSymbolLabel_PingOK.Text = "Ping失败";
                             _autoReConnectFlag = 0;
+                            LogAppend(CustomColor.Error, "[时钟检测网络]网络未连接 - 4");
                             break;
                         }
                     case 5:
@@ -595,10 +683,10 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "使用网卡上网";
                             uiSymbolLabel_PingOK.Text = "Ping失败";
                             _autoReConnectFlag = 0;
+                            LogAppend(CustomColor.Error, "[时钟检测网络]网络未连接 - 5");
                             break;
                         }
                 }
-                Console.WriteLine("Timer NetCheck success");
             });
             netCheckThread.Start();
         }
@@ -622,7 +710,7 @@ namespace AutoDialUp
                 //MessageBox.Show(json);
                 try
                 {
-                    if(uiCheckBox_AutoStart.Checked == true)
+                    if(uiCheckBox_AutoStart.Checked == true)//此处不用写日志，因为保存完成后会重启，所以只需要写保存失败的日志
                     {
                         ShowWaitForm("正在设置开机自动启动...");
                         AutoStart start = new AutoStart();
@@ -637,11 +725,13 @@ namespace AutoDialUp
                     else//不用设置开机自启 所以只需要写配置文件就好
                     {
                         File.WriteAllText(@"Config.json", json);
+                        LogAppend(CustomColor.Success, "保存软件配置文件成功");
                     }
                 }
                 catch (Exception ex)
                 {
                     ShowErrorDialog("异常捕获", string.Format("保存软件配置文件失败\n异常消息:\n{0}\n异常跟踪：\n{1}", ex.Message, ex.Source));
+                    LogAppend(CustomColor.Error, "保存软件配置文件失败：写文件时异常");
                 }
                 finally
                 {
@@ -674,6 +764,7 @@ namespace AutoDialUp
                         {
                             UIMessageDialog.ShowMessageDialog("软件无法覆盖先前保存的配置文件\n尝试将软件目录下的\"Config\"文件手动删除后进行保存配置\n点击确定后软件自动打开软件所在目录并定位配置文件", "提示", false, Style);
                             OpenFolder.OpenFolderAndSelectedFile(Environment.CurrentDirectory + @"\Config.json");
+                            LogAppend(CustomColor.Error, "保存软件配置文件失败：写文件时异常");
                             goto Final;
                         }
                         bool ifAutoStartBefore = softwareConfig.AutoStart == 1 ? true : false;
@@ -685,6 +776,7 @@ namespace AutoDialUp
                                 AutoStart start = new AutoStart();
                                 start.SetMeAutoStart(true);
                                 SetWaitFormDescription("开机自动启动设置成功");
+                                LogAppend(CustomColor.Success, "开机自动启动设置成功");
                                 Thread.Sleep(1500);
                                 HideWaitForm();
                             }
@@ -698,6 +790,10 @@ namespace AutoDialUp
                                 HideWaitForm();
                             }
                         }
+                        UIMessageDialog.ShowMessageDialog("已保存完毕，需要重启软件\n点击确认后软件自动重启", "提示", false, Style);
+                        notifyIcon_MainForm.Dispose();
+                        Application.Exit();
+                        Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location);
                     Final: Console.WriteLine("覆盖设置文件操作已完成");
                     }
                     else
@@ -733,33 +829,50 @@ namespace AutoDialUp
                             if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
                             {
                                 Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
+                                LogAppend(CustomColor.Success, "启动时自动拨号连接成功");
                             }
                             else
                             {
                                 Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
+                                LogAppend(CustomColor.Error, "启动时自动拨号连接失败");
                             }
                         }
                         else
+                        {
                             Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2", Notifications.Wpf.NotificationType.Error);
+                            LogAppend(CustomColor.Error, "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2");
+                        }  
                     }
                     else
+                    {
                         Toast.ShowNotifiy("自动连接", "由于网络已处于连接状态，启动时自动连接已取消", Notifications.Wpf.NotificationType.Information);
+                        LogAppend(CustomColor.Information, "由于网络已处于连接状态，启动时自动连接已取消");
+                    } 
                 }
                 else
+                {
                     Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接", Notifications.Wpf.NotificationType.Error);
+                    LogAppend(CustomColor.Error, "由于宽带配置文件缺失或内容有误，无法进行自动连接");
+                }
                 //Toast.ShowNotifiy("Title", "你设置了自动连接网络", Notifications.Wpf.NotificationType.Information);
                 timer_AutoConnect.Enabled = false;//不管连没连上，只连一次
             }
             else
             {
                 if (_autoConnectTimerLocker == 0)
+                {
                     timer_AutoConnect.Enabled = false;
+                    LogAppend(CustomColor.Worring, "启动时自动拨号连接功能未启用");
+                }
                 else
                 {
                     //这里是等待线程里读取配置读好留的缓冲时间，如果10次都等不到那就把时钟关掉
                     _autoConnectTimerLocker = _autoConnectTimerLocker + 10;
                     if(_autoConnectTimerLocker >= 100)
+                    {
                         timer_AutoConnect.Enabled = false;
+                        LogAppend(CustomColor.Worring, "启动时自动拨号连接功能检测超时");
+                    }
                 }
             }
         }
@@ -779,7 +892,7 @@ namespace AutoDialUp
                     {
                         if(File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
                         {
-                            Console.WriteLine("网络断开，需要连接");
+                            LogAppend(CustomColor.Worring, "检测到网络断开，正在重新连接");
                             int tempReConnectCount = 0;
                             timer_AutoReConnect.Interval = 5201314;//在重连的时候先挂起时钟避免重连两次
                             for (int i = 1; i <= softwareConfig.ReConnectCount; i++)
@@ -788,6 +901,7 @@ namespace AutoDialUp
                                 if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
                                 {
                                     Toast.ShowNotifiy("自动重连", "检测到网络断开，已自动重连成功", Notifications.Wpf.NotificationType.Success);
+                                    LogAppend(CustomColor.Success, "[自动重连]重连成功");
                                     _autoReConnectFlag = 1;//把tag置为1以免重复重连导致软件主线程阻塞时间变长
                                     timer_AutoReConnect.Interval = 60000;//重连成功后避免多次重连导致拨号故障，下一次重连设置为60秒后
                                     break;
@@ -799,7 +913,8 @@ namespace AutoDialUp
                                     {
                                         //这里需要做一个如果重连失败后就不再重连了，避免软件很卡，但是持续检测网络是在线程中进行，无法操作时钟，需要一个tag，在下次更新中进行实现
                                         //Toast.ShowNotifiy("自动重连", "检测到网络断开，且自动重连失败\n已临时关闭自动重连功能避免软件卡死，手动连接网络成功后自动重连功能会再次开启", Notifications.Wpf.NotificationType.Error);
-                                        Toast.ShowNotifiy("自动重连", "检测到网络断开，且自动重连全部失败", Notifications.Wpf.NotificationType.Error);
+                                        Toast.ShowNotifiy("自动重连", "检测到网络断开但自动重连全部失败", Notifications.Wpf.NotificationType.Error);
+                                        LogAppend(CustomColor.Error, "[自动重连]检测到网络断开但重连全部失败");
                                         timer_AutoReConnect.Interval = 6000;//重连失败，继续重连，后期改
                                         break;
                                     }
@@ -811,12 +926,14 @@ namespace AutoDialUp
                 else
                 {
                     Console.WriteLine("持续检测断网时钟已停用,原因是用户没有开启功能");
+                    LogAppend(CustomColor.Error, "[自动重连]功能已停用,原因是用户没有开启功能");
                     timer_AutoReConnect.Enabled = false;
                 }
             }
             else
             {
                 Console.WriteLine("持续检测断网时钟已停用,原因是软件配置不存在");
+                LogAppend(CustomColor.Error, "[自动重连]功能已停用,原因是软件配置不存在");
                 timer_AutoReConnect.Enabled = false;//如果software是null则没有软件设置，直接把时钟停用
             }
                 
@@ -845,6 +962,7 @@ namespace AutoDialUp
                 //更改Text为最小化运行中
                 this.notifyIcon_MainForm.Text = "自动拨号器 - 后台运行中";
                 软件状态ToolStripMenuItem.Text = "自动拨号器 - 后台运行中";//托盘菜单中的软件状态
+                LogAppend(CustomColor.Information, "用户已将软件最小化");
                 Toast.ShowNotifiy("自动拨号器 - 托盘","自动拨号器仍在后台运行中\n如需还原窗口请单击右下角托盘图标",Notifications.Wpf.NotificationType.Information);
             }
         }
@@ -876,6 +994,7 @@ namespace AutoDialUp
                     //更改Text为运行中
                     this.notifyIcon_MainForm.Text = "自动拨号器 - 运行中";
                     软件状态ToolStripMenuItem.Text = "自动拨号器 - 运行中";//托盘菜单中的软件状态
+                    LogAppend(CustomColor.Information, "用户已将软件还原至正常窗口");
                     Toast.ShowNotifiy("自动拨号器 - 托盘", "自动拨号器已恢复前台运行\n如需关闭软件请点击右上角退出", Notifications.Wpf.NotificationType.Success);
                 }
             }
@@ -937,19 +1056,31 @@ namespace AutoDialUp
             //Shift+F6 重新拨号换IP
             if(e.hotKey.ModifierKey == Sunny.UI.ModifierKeys.Shift && e.hotKey.Key == Keys.F6)
             {
-                if(uiCheckBox_HotKey_ShiftF6.Checked == true)
+                if (uiCheckBox_HotKey_ShiftF6.Checked == true)
                 {
+                    LogAppend(CustomColor.Information, "用户按下Shift+F6并开始重新拨号换IP");
                     if (PPPoE.DisConnect(Decrypt.DES(savedaccount.Name, "latiaonb")) == 1)
                     {
                         Thread.Sleep(1000);
                         if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Name, "latiaonb")) == 1)
+                        {
                             Toast.ShowNotifiy("重新拨号换IP", "已成功重新拨号换IP", Notifications.Wpf.NotificationType.Success);
+                            LogAppend(CustomColor.Success, "已成功重新拨号换IP");
+                        }
                         else
+                        {
                             Toast.ShowNotifiy("重新拨号换IP", "由于拨号连接失败，未能更换IP", Notifications.Wpf.NotificationType.Error);
+                            LogAppend(CustomColor.Error, "重新拨号换IP失败，原因：拨号连接失败");
+                        }
                     }
                     else
+                    {
                         Toast.ShowNotifiy("重新拨号换IP", "由于断开当前拨号连接失败，未能更换IP", Notifications.Wpf.NotificationType.Error);
+                        LogAppend(CustomColor.Error, "重新拨号换IP失败，原因：断开当前拨号连接失败");
+                    }
                 }
+                else
+                    LogAppend(CustomColor.Information, "用户按下Shift+F6但并未开启重新拨号换IP功能");
             }
             //Shift+F7 一键连接
             if (e.hotKey.ModifierKey == Sunny.UI.ModifierKeys.Shift && e.hotKey.Key == Keys.F7)
@@ -967,9 +1098,12 @@ namespace AutoDialUp
                         if (PPPoE.DisConnect(Decrypt.DES(savedaccount.Name, "latiaonb")) == 1)
                         {
                             Toast.ShowNotifiy("断开拨号", "已成功断开拨号连接，请注意如果开启断网自动重连功能，6秒后会自动重连", Notifications.Wpf.NotificationType.Warning);
+                            LogAppend(CustomColor.Success, "已成功断开拨号连接");
                         }
                     }
                 }
+                else
+                    LogAppend(CustomColor.Information, "用户按下Shift+F8但并开启断开拨号功能");
             }
             //Esc 退出软件
             if (e.hotKey.Key == Keys.Escape)
@@ -1015,10 +1149,12 @@ namespace AutoDialUp
                     try
                     {
                         File.WriteAllText(@"HotKey.json", json);
+                        LogAppend(CustomColor.Success, "保存热键配置文件成功");
                     }
                     catch (Exception ex)
                     {
                         ShowErrorDialog("异常捕获", string.Format("保存热键配置文件失败\n异常消息:\n{0}\n异常跟踪：\n{1}", ex.Message, ex.Source));
+                        LogAppend(CustomColor.Error, "保存热键配置文件失败：写文件时异常");
                     }
                     finally
                     {
@@ -1041,10 +1177,12 @@ namespace AutoDialUp
                         try
                         {
                             File.WriteAllText(@"HotKey.json", json);
+                            LogAppend(CustomColor.Success, "保存热键配置文件成功");
                         }
                         catch (Exception ex)
                         {
                             ShowErrorDialog("异常捕获", string.Format("保存热键配置文件失败\n异常消息:\n{0}\n异常跟踪：\n{1}", ex.Message, ex.Source));
+                            LogAppend(CustomColor.Error, "保存热键配置文件失败：写文件时异常");
                         }
                         finally
                         {
@@ -1056,6 +1194,7 @@ namespace AutoDialUp
             else
             {
                 ShowErrorDialog("错误", "由于未选择任何热键设置，无需保存");
+                LogAppend(CustomColor.Error, "保存热键配置文件失败：未选择任何热键设置");
             }
         }
     }
