@@ -823,25 +823,29 @@ namespace AutoDialUp
                     int tempNetChecker = GetInternetConStatus.GetNetConStatus("baidu.com");
                     if (tempNetChecker == 1 || tempNetChecker ==4 || tempNetChecker == 5)
                     {
-                        if (File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
+                        try
                         {
-                            timer_AutoConnect.Interval = 5201314;//先挂起时钟避免多次连接
-                            if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
+                            if (File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
                             {
-                                Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
-                                LogAppend(CustomColor.Success, "启动时自动拨号连接成功");
+                                timer_AutoConnect.Interval = 5201314;//先挂起时钟避免多次连接
+                                if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
+                                {
+                                    Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
+                                    LogAppend(CustomColor.Success, "启动时自动拨号连接成功");
+                                }
+                                else
+                                {
+                                    Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
+                                    LogAppend(CustomColor.Error, "启动时自动拨号连接失败");
+                                }
                             }
                             else
                             {
-                                Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
-                                LogAppend(CustomColor.Error, "启动时自动拨号连接失败");
+                                Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2", Notifications.Wpf.NotificationType.Error);
+                                LogAppend(CustomColor.Error, "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2");
                             }
                         }
-                        else
-                        {
-                            Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2", Notifications.Wpf.NotificationType.Error);
-                            LogAppend(CustomColor.Error, "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2");
-                        }  
+                        catch  { }
                     }
                     else
                     {
@@ -859,21 +863,25 @@ namespace AutoDialUp
             }
             else
             {
-                if (_autoConnectTimerLocker == 0)
+                try
                 {
-                    timer_AutoConnect.Enabled = false;
-                    LogAppend(CustomColor.Worring, "启动时自动拨号连接功能未启用");
-                }
-                else
-                {
-                    //这里是等待线程里读取配置读好留的缓冲时间，如果10次都等不到那就把时钟关掉
-                    _autoConnectTimerLocker = _autoConnectTimerLocker + 10;
-                    if(_autoConnectTimerLocker >= 100)
+                    if (_autoConnectTimerLocker == 0)
                     {
                         timer_AutoConnect.Enabled = false;
-                        LogAppend(CustomColor.Worring, "启动时自动拨号连接功能检测超时");
+                        LogAppend(CustomColor.Worring, "启动时自动拨号连接功能未启用");
+                    }
+                    else
+                    {
+                        //这里是等待线程里读取配置读好留的缓冲时间，如果10次都等不到那就把时钟关掉
+                        _autoConnectTimerLocker = _autoConnectTimerLocker + 10;
+                        if (_autoConnectTimerLocker >= 100)
+                        {
+                            timer_AutoConnect.Enabled = false;
+                            LogAppend(CustomColor.Worring, "启动时自动拨号连接功能检测超时");
+                        }
                     }
                 }
+                catch { }
             }
         }
 
@@ -890,49 +898,51 @@ namespace AutoDialUp
                 {
                     if (_autoReConnectFlag == 0)//检测网络状态是线程，无法直接操作时钟，通过Flag的Locker形式来间接操作时钟
                     {
-                        if(File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
+                        try
                         {
-                            LogAppend(CustomColor.Worring, "检测到网络断开，正在重新连接");
-                            int tempReConnectCount = 0;
-                            timer_AutoReConnect.Interval = 5201314;//在重连的时候先挂起时钟避免重连两次
-                            for (int i = 1; i <= softwareConfig.ReConnectCount; i++)
+                            if (File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
                             {
-                                //Thread.Sleep(1000);
-                                if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
+                                LogAppend(CustomColor.Worring, "检测到网络断开，正在重新连接");
+                                int tempReConnectCount = 0;
+                                timer_AutoReConnect.Interval = 5201314;//在重连的时候先挂起时钟避免重连两次
+                                for (int i = 1; i <= softwareConfig.ReConnectCount; i++)
                                 {
-                                    Toast.ShowNotifiy("自动重连", "检测到网络断开，已自动重连成功", Notifications.Wpf.NotificationType.Success);
-                                    LogAppend(CustomColor.Success, "[自动重连]重连成功");
-                                    _autoReConnectFlag = 1;//把tag置为1以免重复重连导致软件主线程阻塞时间变长
-                                    timer_AutoReConnect.Interval = 60000;//重连成功后避免多次重连导致拨号故障，下一次重连设置为60秒后
-                                    break;
-                                }
-                                else
-                                {
-                                    tempReConnectCount++;
-                                    if (tempReConnectCount >= softwareConfig.ReConnectCount)
+                                    //Thread.Sleep(1000);
+                                    if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
                                     {
-                                        //这里需要做一个如果重连失败后就不再重连了，避免软件很卡，但是持续检测网络是在线程中进行，无法操作时钟，需要一个tag，在下次更新中进行实现
-                                        //Toast.ShowNotifiy("自动重连", "检测到网络断开，且自动重连失败\n已临时关闭自动重连功能避免软件卡死，手动连接网络成功后自动重连功能会再次开启", Notifications.Wpf.NotificationType.Error);
-                                        Toast.ShowNotifiy("自动重连", "检测到网络断开但自动重连全部失败", Notifications.Wpf.NotificationType.Error);
-                                        LogAppend(CustomColor.Error, "[自动重连]检测到网络断开但重连全部失败");
-                                        timer_AutoReConnect.Interval = 6000;//重连失败，继续重连，后期改
+                                        Toast.ShowNotifiy("自动重连", "检测到网络断开，已自动重连成功", Notifications.Wpf.NotificationType.Success);
+                                        LogAppend(CustomColor.Success, "[自动重连]重连成功");
+                                        _autoReConnectFlag = 1;//把tag置为1以免重复重连导致软件主线程阻塞时间变长
+                                        timer_AutoReConnect.Interval = 60000;//重连成功后避免多次重连导致拨号故障，下一次重连设置为60秒后
                                         break;
+                                    }
+                                    else
+                                    {
+                                        tempReConnectCount++;
+                                        if (tempReConnectCount >= softwareConfig.ReConnectCount)
+                                        {
+                                            //这里需要做一个如果重连失败后就不再重连了，避免软件很卡，但是持续检测网络是在线程中进行，无法操作时钟，需要一个tag，在下次更新中进行实现
+                                            //Toast.ShowNotifiy("自动重连", "检测到网络断开，且自动重连失败\n已临时关闭自动重连功能避免软件卡死，手动连接网络成功后自动重连功能会再次开启", Notifications.Wpf.NotificationType.Error);
+                                            Toast.ShowNotifiy("自动重连", "检测到网络断开但自动重连全部失败", Notifications.Wpf.NotificationType.Error);
+                                            LogAppend(CustomColor.Error, "[自动重连]检测到网络断开但重连全部失败");
+                                            timer_AutoReConnect.Interval = 6000;//重连失败，继续重连，后期改
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         }
+                        catch { }
                     }
                 }
                 else
                 {
-                    Console.WriteLine("持续检测断网时钟已停用,原因是用户没有开启功能");
                     LogAppend(CustomColor.Error, "[自动重连]功能已停用,原因是用户没有开启功能");
                     timer_AutoReConnect.Enabled = false;
                 }
             }
             else
             {
-                Console.WriteLine("持续检测断网时钟已停用,原因是软件配置不存在");
                 LogAppend(CustomColor.Error, "[自动重连]功能已停用,原因是软件配置不存在");
                 timer_AutoReConnect.Enabled = false;//如果software是null则没有软件设置，直接把时钟停用
             }
