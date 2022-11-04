@@ -36,7 +36,7 @@ namespace AutoDialUp
         SoftwareConfig softwareConfig = null;
         int _autoConnectTimerLocker = -1;
         int _autoReConnectFlag = -1;//0是未联网，1是已联网
-
+        int successConnectCount = 0;
         public MainForm()
         {
             InitializeComponent();
@@ -596,6 +596,7 @@ namespace AutoDialUp
                             uiSymbolLabel_PingOK.Text = "Ping失败";
                             _autoReConnectFlag = 0;
                             LogAppend(CustomColor.Error, "[时钟检测网络]网络未连接 - 1");
+                            successConnectCount = 0;
                             break;
                         }
                     case 2:
@@ -617,7 +618,13 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "调制解调器上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
                             _autoReConnectFlag = 1;
-                            LogAppend(CustomColor.Success, "[时钟检测网络]网络已连接 - 2");
+                            if (successConnectCount < 10)
+                                successConnectCount++;
+                            else
+                            {
+                                LogAppend(CustomColor.Success, "[时钟检测网络]网络已连接 - 2");
+                                successConnectCount = 0;
+                            }
                             break;
                         }
                     case 3:
@@ -639,7 +646,13 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "使用网卡上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
                             _autoReConnectFlag = 1;
-                            LogAppend(CustomColor.Success, "[时钟检测网络]网络已连接 - 3");
+                            if (successConnectCount < 10)
+                                successConnectCount++;
+                            else
+                            {
+                                LogAppend(CustomColor.Success, "[时钟检测网络]网络已连接 - 3");
+                                successConnectCount = 0;
+                            } 
                             break;
                         }
                     case 4:
@@ -662,6 +675,7 @@ namespace AutoDialUp
                             uiSymbolLabel_PingOK.Text = "Ping失败";
                             _autoReConnectFlag = 0;
                             LogAppend(CustomColor.Error, "[时钟检测网络]网络未连接 - 4");
+                            successConnectCount = 0;
                             break;
                         }
                     case 5:
@@ -684,6 +698,7 @@ namespace AutoDialUp
                             uiSymbolLabel_PingOK.Text = "Ping失败";
                             _autoReConnectFlag = 0;
                             LogAppend(CustomColor.Error, "[时钟检测网络]网络未连接 - 5");
+                            successConnectCount = 0;
                             break;
                         }
                 }
