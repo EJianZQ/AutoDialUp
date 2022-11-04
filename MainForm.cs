@@ -37,6 +37,7 @@ namespace AutoDialUp
         int _autoConnectTimerLocker = -1;
         int _autoReConnectFlag = -1;//0是未联网，1是已联网
         int successConnectCount = 0;
+        DateTime[] runTimeRecord = new DateTime[2];
         public MainForm()
         {
             InitializeComponent();
@@ -50,6 +51,7 @@ namespace AutoDialUp
             parent = Aside.CreateNode("日志", 61747, 30, ++pageIndex);
             parent = Aside.CreateNode("关于", 61638, 30, ++pageIndex);
             tabControl.Region = new Region(new RectangleF(tabPage_Status.Left, tabPage_Status.Top + 5, tabPage_Status.Width, tabPage_Status.Height + 5)); //隐藏tabcontrol的选项卡
+            runTimeRecord[0] = DateTime.Now;//记录开始运行的时间
             RegisterHotKey(Sunny.UI.ModifierKeys.None,Keys.Escape);
             RegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F5);
             RegisterHotKey(Sunny.UI.ModifierKeys.Shift, Keys.F7);
@@ -1043,6 +1045,26 @@ namespace AutoDialUp
         /// <param name="e"></param>
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
+            runTimeRecord[1] = DateTime.Now;
+            TimeSpan ts = runTimeRecord[1] - runTimeRecord[0];
+            Console.WriteLine();
+            Start: if (Directory.Exists("Log"))
+            {
+                try
+                {
+                    File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "Log\\" + String.Format("{0}~{1}.txt", runTimeRecord[0].ToString("MM月dd日HH时mm分ss秒"), runTimeRecord[1].ToString("HH时mm分ss秒")),"此次总运行时间：" + ts.ToString() + Environment.NewLine + uiRichTextBox_Log.Text);
+                }
+                catch { }
+            }
+            else
+            {
+                try
+                {
+                    Directory.CreateDirectory("Log");
+                    goto Start;
+                }
+                catch { }
+            }
             notifyIcon_MainForm.Dispose();
         }
 
