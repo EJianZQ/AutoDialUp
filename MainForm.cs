@@ -264,38 +264,42 @@ namespace AutoDialUp
         /// <param name="text"></param>
         public void LogAppend(CustomColor customcolor,string text)
         {
-            Color color = Color.Black;
-            switch (customcolor)
+            try
             {
-                case CustomColor.Success:
-                    {
-                        color = Color.FromArgb(0, 139, 0);
-                        break; 
-                    }
-                case CustomColor.Information:
-                    {
-                        color = Color.FromArgb(0, 46, 166);
-                        break;
-                    }
-                case CustomColor.Worring:
-                    {
-                        color = Color.FromArgb(255, 119, 15);
-                        break;
-                    }
-                case CustomColor.Error:
-                    {
-                        color = Color.FromArgb(215, 0, 15);
-                        break;
-                    }
+                Color color = Color.Black;
+                switch (customcolor)
+                {
+                    case CustomColor.Success:
+                        {
+                            color = Color.FromArgb(0, 139, 0);
+                            break;
+                        }
+                    case CustomColor.Information:
+                        {
+                            color = Color.FromArgb(0, 46, 166);
+                            break;
+                        }
+                    case CustomColor.Worring:
+                        {
+                            color = Color.FromArgb(255, 119, 15);
+                            break;
+                        }
+                    case CustomColor.Error:
+                        {
+                            color = Color.FromArgb(215, 0, 15);
+                            break;
+                        }
+                }
+                uiRichTextBox_Log.SelectionColor = color;
+                uiRichTextBox_Log.AppendText(string.Format("[{0:T}]:", DateTime.Now) + text + Environment.NewLine);
+                //内容过多时防止内存溢出自动清理
+                if (uiRichTextBox_Log.Text.Length >= 20000)
+                {
+                    uiRichTextBox_Log.Text = String.Empty;
+                    LogAppend(CustomColor.Information, "由于日志内容过多，防止软件崩溃已自动清理");
+                }
             }
-            uiRichTextBox_Log.SelectionColor = color;
-            uiRichTextBox_Log.AppendText(string.Format("[{0:T}]:", DateTime.Now) + text + Environment.NewLine);
-            //内容过多时防止内存溢出自动清理
-            if (uiRichTextBox_Log.Text.Length >= 20000)
-            {
-                uiRichTextBox_Log.Text = String.Empty;
-                LogAppend(CustomColor.Information,"由于日志内容过多，防止软件崩溃已自动清理");
-            }
+            catch { }
         }
 
         /// <summary>
