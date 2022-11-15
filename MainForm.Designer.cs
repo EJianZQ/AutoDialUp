@@ -76,6 +76,19 @@
             this.uiCheckBox_HotKey_ShiftF6 = new Sunny.UI.UICheckBox();
             this.uiCheckBox_HotKey_ShiftF5 = new Sunny.UI.UICheckBox();
             this.uiCheckBox_HotKey_Esc = new Sunny.UI.UICheckBox();
+            this.tabPage_TargetAction = new System.Windows.Forms.TabPage();
+            this.uiSymbolButton2 = new Sunny.UI.UISymbolButton();
+            this.uiSymbolButton_SaveTimePlanConfig = new Sunny.UI.UISymbolButton();
+            this.uiRadioButton_StopActions = new Sunny.UI.UIRadioButton();
+            this.uiRadioButton_NormalActions = new Sunny.UI.UIRadioButton();
+            this.uiMarkLabel5 = new Sunny.UI.UIMarkLabel();
+            this.uiSymbolLabel4 = new Sunny.UI.UISymbolLabel();
+            this.uiTimePicker_EndTime = new Sunny.UI.UITimePicker();
+            this.uiMarkLabel4 = new Sunny.UI.UIMarkLabel();
+            this.uiTimePicker_StartTime = new Sunny.UI.UITimePicker();
+            this.uiComboBox_SelectWhichDay = new Sunny.UI.UIComboBox();
+            this.tabPage_Log = new System.Windows.Forms.TabPage();
+            this.uiRichTextBox_Log = new Sunny.UI.UIRichTextBox();
             this.tabPage_About = new System.Windows.Forms.TabPage();
             this.uiSymbolButton_CheckUpdate = new Sunny.UI.UISymbolButton();
             this.uiSymbolButton_SourceAddress = new Sunny.UI.UISymbolButton();
@@ -96,8 +109,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.一键连接ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出软件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPage_Log = new System.Windows.Forms.TabPage();
-            this.uiRichTextBox_Log = new Sunny.UI.UIRichTextBox();
             this.tabControl.SuspendLayout();
             this.tabPage_Status.SuspendLayout();
             this.uiTitlePanel3.SuspendLayout();
@@ -106,9 +117,10 @@
             this.tabPage_AccountConfig.SuspendLayout();
             this.tabPage_SoftwareConfig.SuspendLayout();
             this.tabPage_HotKey.SuspendLayout();
+            this.tabPage_TargetAction.SuspendLayout();
+            this.tabPage_Log.SuspendLayout();
             this.tabPage_About.SuspendLayout();
             this.contextMenuStrip_Main.SuspendLayout();
-            this.tabPage_Log.SuspendLayout();
             this.SuspendLayout();
             // 
             // uiStyleManager
@@ -138,6 +150,7 @@
             this.tabControl.Controls.Add(this.tabPage_AccountConfig);
             this.tabControl.Controls.Add(this.tabPage_SoftwareConfig);
             this.tabControl.Controls.Add(this.tabPage_HotKey);
+            this.tabControl.Controls.Add(this.tabPage_TargetAction);
             this.tabControl.Controls.Add(this.tabPage_Log);
             this.tabControl.Controls.Add(this.tabPage_About);
             this.tabControl.Location = new System.Drawing.Point(134, 36);
@@ -801,6 +814,216 @@
             this.uiCheckBox_HotKey_Esc.Text = "Esc 退出软件";
             this.uiCheckBox_HotKey_Esc.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
+            // tabPage_TargetAction
+            // 
+            this.tabPage_TargetAction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.tabPage_TargetAction.Controls.Add(this.uiSymbolButton2);
+            this.tabPage_TargetAction.Controls.Add(this.uiSymbolButton_SaveTimePlanConfig);
+            this.tabPage_TargetAction.Controls.Add(this.uiRadioButton_StopActions);
+            this.tabPage_TargetAction.Controls.Add(this.uiRadioButton_NormalActions);
+            this.tabPage_TargetAction.Controls.Add(this.uiMarkLabel5);
+            this.tabPage_TargetAction.Controls.Add(this.uiSymbolLabel4);
+            this.tabPage_TargetAction.Controls.Add(this.uiTimePicker_EndTime);
+            this.tabPage_TargetAction.Controls.Add(this.uiMarkLabel4);
+            this.tabPage_TargetAction.Controls.Add(this.uiTimePicker_StartTime);
+            this.tabPage_TargetAction.Controls.Add(this.uiComboBox_SelectWhichDay);
+            this.tabPage_TargetAction.Location = new System.Drawing.Point(4, 40);
+            this.tabPage_TargetAction.Name = "tabPage_TargetAction";
+            this.tabPage_TargetAction.Size = new System.Drawing.Size(623, 385);
+            this.tabPage_TargetAction.TabIndex = 6;
+            this.tabPage_TargetAction.Text = "时间";
+            // 
+            // uiSymbolButton2
+            // 
+            this.uiSymbolButton2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiSymbolButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton2.Location = new System.Drawing.Point(504, 310);
+            this.uiSymbolButton2.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiSymbolButton2.Name = "uiSymbolButton2";
+            this.uiSymbolButton2.Size = new System.Drawing.Size(57, 55);
+            this.uiSymbolButton2.Symbol = 61529;
+            this.uiSymbolButton2.SymbolSize = 32;
+            this.uiSymbolButton2.TabIndex = 12;
+            this.uiSymbolButton2.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton2.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiSymbolButton_SaveTimePlanConfig
+            // 
+            this.uiSymbolButton_SaveTimePlanConfig.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiSymbolButton_SaveTimePlanConfig.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_SaveTimePlanConfig.Location = new System.Drawing.Point(59, 310);
+            this.uiSymbolButton_SaveTimePlanConfig.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiSymbolButton_SaveTimePlanConfig.Name = "uiSymbolButton_SaveTimePlanConfig";
+            this.uiSymbolButton_SaveTimePlanConfig.Size = new System.Drawing.Size(439, 55);
+            this.uiSymbolButton_SaveTimePlanConfig.Symbol = 61639;
+            this.uiSymbolButton_SaveTimePlanConfig.SymbolOffset = new System.Drawing.Point(-10, 0);
+            this.uiSymbolButton_SaveTimePlanConfig.SymbolSize = 30;
+            this.uiSymbolButton_SaveTimePlanConfig.TabIndex = 11;
+            this.uiSymbolButton_SaveTimePlanConfig.Text = "保存配置";
+            this.uiSymbolButton_SaveTimePlanConfig.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolButton_SaveTimePlanConfig.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiSymbolButton_SaveTimePlanConfig.Click += new System.EventHandler(this.uiSymbolButton_SaveTimePlanConfig_Click);
+            // 
+            // uiRadioButton_StopActions
+            // 
+            this.uiRadioButton_StopActions.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiRadioButton_StopActions.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiRadioButton_StopActions.Location = new System.Drawing.Point(330, 258);
+            this.uiRadioButton_StopActions.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiRadioButton_StopActions.Name = "uiRadioButton_StopActions";
+            this.uiRadioButton_StopActions.Padding = new System.Windows.Forms.Padding(22, 0, 0, 0);
+            this.uiRadioButton_StopActions.Size = new System.Drawing.Size(231, 29);
+            this.uiRadioButton_StopActions.TabIndex = 7;
+            this.uiRadioButton_StopActions.Text = "此时间段内不执行";
+            this.uiRadioButton_StopActions.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiRadioButton_NormalActions
+            // 
+            this.uiRadioButton_NormalActions.Checked = true;
+            this.uiRadioButton_NormalActions.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiRadioButton_NormalActions.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiRadioButton_NormalActions.Location = new System.Drawing.Point(59, 258);
+            this.uiRadioButton_NormalActions.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiRadioButton_NormalActions.Name = "uiRadioButton_NormalActions";
+            this.uiRadioButton_NormalActions.Padding = new System.Windows.Forms.Padding(22, 0, 0, 0);
+            this.uiRadioButton_NormalActions.Size = new System.Drawing.Size(251, 29);
+            this.uiRadioButton_NormalActions.TabIndex = 6;
+            this.uiRadioButton_NormalActions.Text = "此时间段内正常执行";
+            this.uiRadioButton_NormalActions.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiMarkLabel5
+            // 
+            this.uiMarkLabel5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiMarkLabel5.Location = new System.Drawing.Point(61, 200);
+            this.uiMarkLabel5.MarkPos = Sunny.UI.UIMarkLabel.UIMarkPos.Bottom;
+            this.uiMarkLabel5.Name = "uiMarkLabel5";
+            this.uiMarkLabel5.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.uiMarkLabel5.Size = new System.Drawing.Size(112, 38);
+            this.uiMarkLabel5.TabIndex = 5;
+            this.uiMarkLabel5.Text = "指定行为";
+            this.uiMarkLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiMarkLabel5.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiSymbolLabel4
+            // 
+            this.uiSymbolLabel4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolLabel4.Location = new System.Drawing.Point(263, 141);
+            this.uiSymbolLabel4.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiSymbolLabel4.Name = "uiSymbolLabel4";
+            this.uiSymbolLabel4.Padding = new System.Windows.Forms.Padding(52, 0, 0, 0);
+            this.uiSymbolLabel4.Size = new System.Drawing.Size(95, 42);
+            this.uiSymbolLabel4.Symbol = 61518;
+            this.uiSymbolLabel4.SymbolColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            this.uiSymbolLabel4.SymbolSize = 48;
+            this.uiSymbolLabel4.TabIndex = 4;
+            this.uiSymbolLabel4.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiTimePicker_EndTime
+            // 
+            this.uiTimePicker_EndTime.FillColor = System.Drawing.Color.White;
+            this.uiTimePicker_EndTime.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiTimePicker_EndTime.Location = new System.Drawing.Point(390, 141);
+            this.uiTimePicker_EndTime.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiTimePicker_EndTime.MaxLength = 8;
+            this.uiTimePicker_EndTime.MinimumSize = new System.Drawing.Size(63, 0);
+            this.uiTimePicker_EndTime.Name = "uiTimePicker_EndTime";
+            this.uiTimePicker_EndTime.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
+            this.uiTimePicker_EndTime.Size = new System.Drawing.Size(171, 42);
+            this.uiTimePicker_EndTime.SymbolDropDown = 61555;
+            this.uiTimePicker_EndTime.SymbolNormal = 61555;
+            this.uiTimePicker_EndTime.TabIndex = 3;
+            this.uiTimePicker_EndTime.Text = "23:00:00";
+            this.uiTimePicker_EndTime.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiTimePicker_EndTime.Value = new System.DateTime(2022, 11, 11, 23, 0, 0, 0);
+            this.uiTimePicker_EndTime.Watermark = "";
+            this.uiTimePicker_EndTime.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiMarkLabel4
+            // 
+            this.uiMarkLabel4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiMarkLabel4.Location = new System.Drawing.Point(61, 84);
+            this.uiMarkLabel4.MarkPos = Sunny.UI.UIMarkLabel.UIMarkPos.Bottom;
+            this.uiMarkLabel4.Name = "uiMarkLabel4";
+            this.uiMarkLabel4.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.uiMarkLabel4.Size = new System.Drawing.Size(182, 38);
+            this.uiMarkLabel4.TabIndex = 2;
+            this.uiMarkLabel4.Text = "开始与结束时间";
+            this.uiMarkLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiMarkLabel4.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiTimePicker_StartTime
+            // 
+            this.uiTimePicker_StartTime.FillColor = System.Drawing.Color.White;
+            this.uiTimePicker_StartTime.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiTimePicker_StartTime.Location = new System.Drawing.Point(59, 141);
+            this.uiTimePicker_StartTime.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiTimePicker_StartTime.MaxLength = 8;
+            this.uiTimePicker_StartTime.MinimumSize = new System.Drawing.Size(63, 0);
+            this.uiTimePicker_StartTime.Name = "uiTimePicker_StartTime";
+            this.uiTimePicker_StartTime.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
+            this.uiTimePicker_StartTime.Size = new System.Drawing.Size(171, 42);
+            this.uiTimePicker_StartTime.SymbolDropDown = 61555;
+            this.uiTimePicker_StartTime.SymbolNormal = 61555;
+            this.uiTimePicker_StartTime.TabIndex = 1;
+            this.uiTimePicker_StartTime.Text = "08:00:00";
+            this.uiTimePicker_StartTime.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiTimePicker_StartTime.Value = new System.DateTime(2022, 11, 11, 8, 0, 0, 0);
+            this.uiTimePicker_StartTime.Watermark = "";
+            this.uiTimePicker_StartTime.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
+            // uiComboBox_SelectWhichDay
+            // 
+            this.uiComboBox_SelectWhichDay.DataSource = null;
+            this.uiComboBox_SelectWhichDay.DropDownStyle = Sunny.UI.UIDropDownStyle.DropDownList;
+            this.uiComboBox_SelectWhichDay.FillColor = System.Drawing.Color.White;
+            this.uiComboBox_SelectWhichDay.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiComboBox_SelectWhichDay.Items.AddRange(new object[] {
+            "星期一",
+            "星期二",
+            "星期三",
+            "星期四",
+            "星期五",
+            "星期六",
+            "星期天"});
+            this.uiComboBox_SelectWhichDay.Location = new System.Drawing.Point(59, 15);
+            this.uiComboBox_SelectWhichDay.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiComboBox_SelectWhichDay.MinimumSize = new System.Drawing.Size(63, 0);
+            this.uiComboBox_SelectWhichDay.Name = "uiComboBox_SelectWhichDay";
+            this.uiComboBox_SelectWhichDay.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
+            this.uiComboBox_SelectWhichDay.Size = new System.Drawing.Size(502, 43);
+            this.uiComboBox_SelectWhichDay.TabIndex = 0;
+            this.uiComboBox_SelectWhichDay.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiComboBox_SelectWhichDay.Watermark = "选择星期以查看设置";
+            this.uiComboBox_SelectWhichDay.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiComboBox_SelectWhichDay.SelectedIndexChanged += new System.EventHandler(this.uiComboBox_SelectWhichDay_SelectedIndexChanged);
+            // 
+            // tabPage_Log
+            // 
+            this.tabPage_Log.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.tabPage_Log.Controls.Add(this.uiRichTextBox_Log);
+            this.tabPage_Log.Location = new System.Drawing.Point(4, 40);
+            this.tabPage_Log.Name = "tabPage_Log";
+            this.tabPage_Log.Size = new System.Drawing.Size(623, 385);
+            this.tabPage_Log.TabIndex = 5;
+            this.tabPage_Log.Text = "日志";
+            // 
+            // uiRichTextBox_Log
+            // 
+            this.uiRichTextBox_Log.FillColor = System.Drawing.Color.White;
+            this.uiRichTextBox_Log.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiRichTextBox_Log.Location = new System.Drawing.Point(11, 19);
+            this.uiRichTextBox_Log.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiRichTextBox_Log.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiRichTextBox_Log.Name = "uiRichTextBox_Log";
+            this.uiRichTextBox_Log.Padding = new System.Windows.Forms.Padding(2);
+            this.uiRichTextBox_Log.ReadOnly = true;
+            this.uiRichTextBox_Log.ShowText = false;
+            this.uiRichTextBox_Log.Size = new System.Drawing.Size(602, 356);
+            this.uiRichTextBox_Log.Style = Sunny.UI.UIStyle.Custom;
+            this.uiRichTextBox_Log.TabIndex = 0;
+            this.uiRichTextBox_Log.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.uiRichTextBox_Log.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            // 
             // tabPage_About
             // 
             this.tabPage_About.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
@@ -1006,32 +1229,6 @@
             this.退出软件ToolStripMenuItem.Text = "退出软件";
             this.退出软件ToolStripMenuItem.Click += new System.EventHandler(this.退出软件ToolStripMenuItem_Click);
             // 
-            // tabPage_Log
-            // 
-            this.tabPage_Log.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
-            this.tabPage_Log.Controls.Add(this.uiRichTextBox_Log);
-            this.tabPage_Log.Location = new System.Drawing.Point(4, 40);
-            this.tabPage_Log.Name = "tabPage_Log";
-            this.tabPage_Log.Size = new System.Drawing.Size(623, 385);
-            this.tabPage_Log.TabIndex = 5;
-            this.tabPage_Log.Text = "日志";
-            // 
-            // uiRichTextBox_Log
-            // 
-            this.uiRichTextBox_Log.FillColor = System.Drawing.Color.White;
-            this.uiRichTextBox_Log.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiRichTextBox_Log.Location = new System.Drawing.Point(11, 19);
-            this.uiRichTextBox_Log.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.uiRichTextBox_Log.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiRichTextBox_Log.Name = "uiRichTextBox_Log";
-            this.uiRichTextBox_Log.Padding = new System.Windows.Forms.Padding(2);
-            this.uiRichTextBox_Log.ReadOnly = true;
-            this.uiRichTextBox_Log.ShowText = false;
-            this.uiRichTextBox_Log.Size = new System.Drawing.Size(602, 356);
-            this.uiRichTextBox_Log.TabIndex = 0;
-            this.uiRichTextBox_Log.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
-            this.uiRichTextBox_Log.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
-            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1057,9 +1254,10 @@
             this.tabPage_AccountConfig.ResumeLayout(false);
             this.tabPage_SoftwareConfig.ResumeLayout(false);
             this.tabPage_HotKey.ResumeLayout(false);
+            this.tabPage_TargetAction.ResumeLayout(false);
+            this.tabPage_Log.ResumeLayout(false);
             this.tabPage_About.ResumeLayout(false);
             this.contextMenuStrip_Main.ResumeLayout(false);
-            this.tabPage_Log.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1134,6 +1332,17 @@
         private Sunny.UI.UISymbolButton uiSymbolButton_HotKey_ChangeIPHelp;
         private System.Windows.Forms.TabPage tabPage_Log;
         private Sunny.UI.UIRichTextBox uiRichTextBox_Log;
+        private System.Windows.Forms.TabPage tabPage_TargetAction;
+        private Sunny.UI.UIComboBox uiComboBox_SelectWhichDay;
+        private Sunny.UI.UITimePicker uiTimePicker_StartTime;
+        private Sunny.UI.UIMarkLabel uiMarkLabel4;
+        private Sunny.UI.UISymbolLabel uiSymbolLabel4;
+        private Sunny.UI.UITimePicker uiTimePicker_EndTime;
+        private Sunny.UI.UIMarkLabel uiMarkLabel5;
+        private Sunny.UI.UIRadioButton uiRadioButton_StopActions;
+        private Sunny.UI.UIRadioButton uiRadioButton_NormalActions;
+        private Sunny.UI.UISymbolButton uiSymbolButton_SaveTimePlanConfig;
+        private Sunny.UI.UISymbolButton uiSymbolButton2;
     }
 }
 

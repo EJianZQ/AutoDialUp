@@ -18,6 +18,9 @@ using Newtonsoft.Json;
 using Application = System.Windows.Forms.Application;
 using System.Windows.Threading;
 using static System.Net.Mime.MediaTypeNames;
+using static AutoDialUp.Data.TimePlan;
+using System.Drawing.Text;
+using System.Web.UI.Design;
 
 namespace AutoDialUp
 {
@@ -38,6 +41,8 @@ namespace AutoDialUp
         int _autoReConnectFlag = -1;//0是未联网，1是已联网
         int successConnectCount = 0;
         DateTime[] runTimeRecord = new DateTime[2];
+        List<string> timePlanSourceData = new List<string>();
+        OneDay Today = new OneDay(true);
         public MainForm()
         {
             InitializeComponent();
@@ -48,6 +53,7 @@ namespace AutoDialUp
             Aside.CreateChildNode(parent,"拨号", 61612,12, ++pageIndex);
             Aside.CreateChildNode(parent, "自动化", 61904, 12, ++pageIndex);
             Aside.CreateChildNode(parent, "热键", 361957, 12, ++pageIndex);
+            Aside.CreateChildNode(parent, "时间段", 61463, 12, ++pageIndex);
             parent = Aside.CreateNode("日志", 61747, 30, ++pageIndex);
             parent = Aside.CreateNode("关于", 61638, 30, ++pageIndex);
             tabControl.Region = new Region(new RectangleF(tabPage_Status.Left, tabPage_Status.Top + 5, tabPage_Status.Width, tabPage_Status.Height + 5)); //隐藏tabcontrol的选项卡
@@ -255,7 +261,180 @@ namespace AutoDialUp
             });
             configCheckThread.Start();
             timer_NetChecker.Enabled = true;
-            LogAppend(CustomColor.Information, "主窗口事件处理完毕");
+            Thread timePlanCheckThread = new Thread(() =>
+            {
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Mon.json"))
+                {
+                    DaysCollections.Mon = JsonConvert.DeserializeObject<OneDay>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Mon.json", Encoding.UTF8));
+                    DaysCollections.Mon.Initialized = true;
+                    timePlanSourceData.Add(String.Format("星期一 - 已设置 - {0} ~ {1}", DaysCollections.Mon.StartTime, DaysCollections.Mon.EndTime));
+                }
+                else
+                {
+                    DaysCollections.Mon = new OneDay(false);
+                    timePlanSourceData.Add("星期一 - 未设置");
+                }
+
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Tues.json"))
+                {
+                    DaysCollections.Tues = JsonConvert.DeserializeObject<OneDay>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Tues.json", Encoding.UTF8));
+                    DaysCollections.Tues.Initialized = true;
+                    timePlanSourceData.Add(String.Format("星期二 - 已设置 - {0} ~ {1}", DaysCollections.Tues.StartTime, DaysCollections.Tues.EndTime));
+                }
+                else
+                {
+                    DaysCollections.Tues = new OneDay(false);
+                    timePlanSourceData.Add("星期二 - 未设置");
+                }
+
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Wed.json"))
+                {
+                    DaysCollections.Wed = JsonConvert.DeserializeObject<OneDay>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Wed.json", Encoding.UTF8));
+                    DaysCollections.Wed.Initialized = true;
+                    timePlanSourceData.Add(String.Format("星期三 - 已设置 - {0} ~ {1}", DaysCollections.Wed.StartTime, DaysCollections.Wed.EndTime));
+                }
+                else
+                {
+                    DaysCollections.Wed = new OneDay(false);
+                    timePlanSourceData.Add("星期三 - 未设置");
+                }
+
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Thur.json"))
+                {
+                    DaysCollections.Thur = JsonConvert.DeserializeObject<OneDay>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Thur.json", Encoding.UTF8));
+                    DaysCollections.Thur.Initialized = true;
+                    timePlanSourceData.Add(String.Format("星期四 - 已设置 - {0} ~ {1}", DaysCollections.Thur.StartTime, DaysCollections.Thur.EndTime));
+                }
+                else
+                {
+                    DaysCollections.Thur = new OneDay(false);
+                    timePlanSourceData.Add("星期四 - 未设置");
+                }
+
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Fri.json"))
+                {
+                    DaysCollections.Fri = JsonConvert.DeserializeObject<OneDay>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Fri.json", Encoding.UTF8));
+                    DaysCollections.Fri.Initialized = true;
+                    timePlanSourceData.Add(String.Format("星期五 - 已设置 - {0} ~ {1}", DaysCollections.Fri.StartTime, DaysCollections.Fri.EndTime));
+                }
+                else
+                {
+                    DaysCollections.Fri = new OneDay(false);
+                    timePlanSourceData.Add("星期五 - 未设置");
+                }
+
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Sat.json"))
+                {
+                    DaysCollections.Sat = JsonConvert.DeserializeObject<OneDay>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Sat.json", Encoding.UTF8));
+                    DaysCollections.Sat.Initialized = true;
+                    timePlanSourceData.Add(String.Format("星期六 - 已设置 - {0} ~ {1}", DaysCollections.Sat.StartTime, DaysCollections.Sat.EndTime));
+                }
+                else
+                {
+                    DaysCollections.Sat = new OneDay(false);
+                    timePlanSourceData.Add("星期六 - 未设置");
+                }
+
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Sun.json"))
+                {
+                    DaysCollections.Sun = JsonConvert.DeserializeObject<OneDay>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "TimePlan\\Sun.json", Encoding.UTF8));
+                    DaysCollections.Sun.Initialized = true;
+                    timePlanSourceData.Add(String.Format("星期日 - 已设置 - {0} ~ {1}", DaysCollections.Sun.StartTime, DaysCollections.Sun.EndTime));
+                }
+                else
+                {
+                    DaysCollections.Sun = new OneDay(false);
+                    timePlanSourceData.Add("星期日 - 未设置");
+                }
+
+                if(timePlanSourceData.Count == 7)
+                {
+                    uiComboBox_SelectWhichDay.DataSource = timePlanSourceData;
+                }
+
+                switch (TimePlan.WhichDay())
+                {
+                    case 1:
+                        {
+                            Today = DaysCollections.Mon;
+                            break;
+                        }
+                    case 2:
+                        {
+                            Today = DaysCollections.Tues;
+                            break;
+                        }
+                    case 3:
+                        {
+                            Today = DaysCollections.Wed;
+                            break;
+                        }
+                    case 4:
+                        {
+                            Today = DaysCollections.Thur;
+                            break;
+                        }
+                    case 5:
+                        {
+                            Today = DaysCollections.Fri;
+                            break;
+                        }
+                    case 6:
+                        {
+                            Today = DaysCollections.Sat;
+                            break;
+                        }
+                    case 7:
+                        {
+                            Today = DaysCollections.Sun;
+                            break;
+                        }
+                }
+                //MessageBox.Show(Today.Check().ToString());
+            });
+            timePlanCheckThread.Start();
+            Thread timePlanEveryDayRefreshThread = new Thread(() =>
+            {
+                //此线程的目的旨在每到新的一天程序就会自杀并重启，省去校验日期的麻烦，后期也可能会改
+                for(; ; )
+                {
+                    if(DateTime.Now.DayOfWeek != runTimeRecord[0].DayOfWeek)
+                    {
+                        //先写出日志再释放图标最后重启
+                        runTimeRecord[1] = DateTime.Now;
+                        TimeSpan ts = runTimeRecord[1] - runTimeRecord[0];
+                    Start: if (Directory.Exists("Log"))
+                        {
+                            try
+                            {
+                                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "Log\\" + String.Format("{0}~{1}.txt", runTimeRecord[0].ToString("MM月dd日HH时mm分ss秒"), runTimeRecord[1].ToString("HH时mm分ss秒")), "此次总运行时间：" + ts.ToString() + Environment.NewLine + uiRichTextBox_Log.Text);
+                            }
+                            catch { }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                Directory.CreateDirectory("Log");
+                                goto Start;
+                            }
+                            catch { }
+                        }
+                        Thread.Sleep(500);
+                        notifyIcon_MainForm.Dispose();
+                        Application.Exit();
+                        Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    }
+                    Thread.Sleep(60000);
+                }
+            });
+            timePlanEveryDayRefreshThread.Start();
+            LogAppend(CustomColor.Information, "主窗口初始化事件处理完毕");
+
+            #region 测试功能区
+            /*OneDay testDay = new OneDay();
+            MessageBox.Show(testDay.StartTime.ToString());*/
+            #endregion
         }
 
         /// <summary>
@@ -336,15 +515,21 @@ namespace AutoDialUp
                         LogAppend(CustomColor.Information, "用户切换到了热键设置页面");
                         break;
                     }
-                case "TreeNode: 日志":
+                case "TreeNode: 时间段":
                     {
                         tabControl.SelectedIndex = 4;
+                        LogAppend(CustomColor.Information, "用户切换到了时间段设置页面");
+                        break;
+                    }
+                case "TreeNode: 日志":
+                    {
+                        tabControl.SelectedIndex = 5;
                         LogAppend(CustomColor.Information, "用户切换到了日志页面");
                         break;
                     }
                 case "TreeNode: 关于":
                     {
-                        tabControl.SelectedIndex = 5;
+                        tabControl.SelectedIndex = 6;
                         LogAppend(CustomColor.Information, "用户切换到了关于页面");
                         break;
                     }
@@ -837,72 +1022,80 @@ namespace AutoDialUp
         /// <param name="e"></param>
         private void timer_AutoConnect_Tick(object sender, EventArgs e)
         {
-            if(_autoConnectTimerLocker == 1)
-            {
-                if (softwareConfig != null)
+            if(Today.Check() == true) 
+            { 
+                if(_autoConnectTimerLocker == 1)
                 {
-                    int tempNetChecker = GetInternetConStatus.GetNetConStatus("baidu.com");
-                    if (tempNetChecker == 1 || tempNetChecker ==4 || tempNetChecker == 5)
+                    if (softwareConfig != null)
                     {
-                        try
+                        int tempNetChecker = GetInternetConStatus.GetNetConStatus("baidu.com");
+                        if (tempNetChecker == 1 || tempNetChecker ==4 || tempNetChecker == 5)
                         {
-                            if (File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
+                            try
                             {
-                                timer_AutoConnect.Interval = 5201314;//先挂起时钟避免多次连接
-                                if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
+                                if (File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
                                 {
-                                    Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
-                                    LogAppend(CustomColor.Success, "启动时自动拨号连接成功");
+                                    timer_AutoConnect.Interval = 5201314;//先挂起时钟避免多次连接
+                                    if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
+                                    {
+                                        Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接成功\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Success);
+                                        LogAppend(CustomColor.Success, "启动时自动拨号连接成功");
+                                    }
+                                    else
+                                    {
+                                        Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
+                                        LogAppend(CustomColor.Error, "启动时自动拨号连接失败");
+                                    }
                                 }
                                 else
                                 {
-                                    Toast.ShowNotifiy("自动连接", String.Format("状态:宽带自动连接失败\n宽带名称:{0}\n宽带账号:{1}", Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb")), Notifications.Wpf.NotificationType.Error);
-                                    LogAppend(CustomColor.Error, "启动时自动拨号连接失败");
+                                    Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2", Notifications.Wpf.NotificationType.Error);
+                                    LogAppend(CustomColor.Error, "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2");
                                 }
                             }
-                            else
-                            {
-                                Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2", Notifications.Wpf.NotificationType.Error);
-                                LogAppend(CustomColor.Error, "由于宽带配置文件缺失或内容有误，无法进行自动连接 - 2");
-                            }
+                            catch  { }
                         }
-                        catch  { }
+                        else
+                        {
+                            Toast.ShowNotifiy("自动连接", "由于网络已处于连接状态，启动时自动连接已取消", Notifications.Wpf.NotificationType.Information);
+                            LogAppend(CustomColor.Information, "由于网络已处于连接状态，启动时自动连接已取消");
+                        } 
                     }
                     else
                     {
-                        Toast.ShowNotifiy("自动连接", "由于网络已处于连接状态，启动时自动连接已取消", Notifications.Wpf.NotificationType.Information);
-                        LogAppend(CustomColor.Information, "由于网络已处于连接状态，启动时自动连接已取消");
-                    } 
+                        Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接", Notifications.Wpf.NotificationType.Error);
+                        LogAppend(CustomColor.Error, "由于宽带配置文件缺失或内容有误，无法进行自动连接");
+                    }
+                    //Toast.ShowNotifiy("Title", "你设置了自动连接网络", Notifications.Wpf.NotificationType.Information);
+                    timer_AutoConnect.Enabled = false;//不管连没连上，只连一次
                 }
                 else
                 {
-                    Toast.ShowNotifiy("自动连接", "由于宽带配置文件缺失或内容有误，无法进行自动连接", Notifications.Wpf.NotificationType.Error);
-                    LogAppend(CustomColor.Error, "由于宽带配置文件缺失或内容有误，无法进行自动连接");
+                    try
+                    {
+                        if (_autoConnectTimerLocker == 0)
+                        {
+                            timer_AutoConnect.Enabled = false;
+                            LogAppend(CustomColor.Worring, "启动时自动拨号连接功能未启用");
+                        }
+                        else
+                        {
+                            //这里是等待线程里读取配置读好留的缓冲时间，如果10次都等不到那就把时钟关掉
+                            _autoConnectTimerLocker = _autoConnectTimerLocker + 10;
+                            if (_autoConnectTimerLocker >= 100)
+                            {
+                                timer_AutoConnect.Enabled = false;
+                                LogAppend(CustomColor.Worring, "启动时自动拨号连接功能检测超时");
+                            }
+                        }
+                    }
+                    catch { }
                 }
-                //Toast.ShowNotifiy("Title", "你设置了自动连接网络", Notifications.Wpf.NotificationType.Information);
-                timer_AutoConnect.Enabled = false;//不管连没连上，只连一次
             }
             else
             {
-                try
-                {
-                    if (_autoConnectTimerLocker == 0)
-                    {
-                        timer_AutoConnect.Enabled = false;
-                        LogAppend(CustomColor.Worring, "启动时自动拨号连接功能未启用");
-                    }
-                    else
-                    {
-                        //这里是等待线程里读取配置读好留的缓冲时间，如果10次都等不到那就把时钟关掉
-                        _autoConnectTimerLocker = _autoConnectTimerLocker + 10;
-                        if (_autoConnectTimerLocker >= 100)
-                        {
-                            timer_AutoConnect.Enabled = false;
-                            LogAppend(CustomColor.Worring, "启动时自动拨号连接功能检测超时");
-                        }
-                    }
-                }
-                catch { }
+                Toast.ShowNotifiy("自动连接", "当前不在设置的时间段内，程序不进行自动连接", Notifications.Wpf.NotificationType.Information);
+                timer_AutoConnect.Enabled = false;
             }
         }
 
@@ -919,42 +1112,51 @@ namespace AutoDialUp
                 {
                     if (_autoReConnectFlag == 0)//检测网络状态是线程，无法直接操作时钟，通过Flag的Locker形式来间接操作时钟
                     {
-                        try
+                        if (Today.Check() == true)
                         {
-                            if (File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
+                            try
                             {
-                                LogAppend(CustomColor.Worring, "检测到网络断开，正在重新连接");
-                                int tempReConnectCount = 0;
-                                timer_AutoReConnect.Interval = 5201314;//在重连的时候先挂起时钟避免重连两次
-                                for (int i = 1; i <= softwareConfig.ReConnectCount; i++)
+                                if (File.Exists(@"Account.json") == true && savedaccount.DialUpType >= 0 && savedaccount.Name != "解密失败" && savedaccount.Account != "解密失败" && savedaccount.Password != "解密失败")//最后判断一下账号配置文件存不存在，存在再进行重连
                                 {
-                                    //Thread.Sleep(1000);
-                                    if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
+                                    LogAppend(CustomColor.Worring, "检测到网络断开，正在重新连接");
+                                    int tempReConnectCount = 0;
+                                    timer_AutoReConnect.Interval = 5201314;//在重连的时候先挂起时钟避免重连两次
+                                    for (int i = 1; i <= softwareConfig.ReConnectCount; i++)
                                     {
-                                        Toast.ShowNotifiy("自动重连", "检测到网络断开，已自动重连成功", Notifications.Wpf.NotificationType.Success);
-                                        LogAppend(CustomColor.Success, "[自动重连]重连成功");
-                                        _autoReConnectFlag = 1;//把tag置为1以免重复重连导致软件主线程阻塞时间变长
-                                        timer_AutoReConnect.Interval = 60000;//重连成功后避免多次重连导致拨号故障，下一次重连设置为60秒后
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        tempReConnectCount++;
-                                        if (tempReConnectCount >= softwareConfig.ReConnectCount)
+                                        //Thread.Sleep(1000);
+                                        if (PPPoE.Connect(Decrypt.DES(savedaccount.Name, "latiaonb"), Decrypt.DES(savedaccount.Account, "latiaonb"), Decrypt.DES(savedaccount.Password, "latiaonb")) == 1)
                                         {
-                                            //这里需要做一个如果重连失败后就不再重连了，避免软件很卡，但是持续检测网络是在线程中进行，无法操作时钟，需要一个tag，在下次更新中进行实现
-                                            //Toast.ShowNotifiy("自动重连", "检测到网络断开，且自动重连失败\n已临时关闭自动重连功能避免软件卡死，手动连接网络成功后自动重连功能会再次开启", Notifications.Wpf.NotificationType.Error);
-                                            Toast.ShowNotifiy("自动重连", "检测到网络断开但自动重连全部失败", Notifications.Wpf.NotificationType.Error);
-                                            LogAppend(CustomColor.Error, "[自动重连]检测到网络断开但重连全部失败");
-                                            timer_AutoReConnect.Interval = 6000;//重连失败，继续重连，后期改
+                                            Toast.ShowNotifiy("自动重连", "检测到网络断开，已自动重连成功", Notifications.Wpf.NotificationType.Success);
+                                            LogAppend(CustomColor.Success, "[自动重连]重连成功");
+                                            _autoReConnectFlag = 1;//把tag置为1以免重复重连导致软件主线程阻塞时间变长
+                                            timer_AutoReConnect.Interval = 60000;//重连成功后避免多次重连导致拨号故障，下一次重连设置为60秒后
                                             break;
+                                        }
+                                        else
+                                        {
+                                            tempReConnectCount++;
+                                            if (tempReConnectCount >= softwareConfig.ReConnectCount)
+                                            {
+                                                //这里需要做一个如果重连失败后就不再重连了，避免软件很卡，但是持续检测网络是在线程中进行，无法操作时钟，需要一个tag，在下次更新中进行实现
+                                                //Toast.ShowNotifiy("自动重连", "检测到网络断开，且自动重连失败\n已临时关闭自动重连功能避免软件卡死，手动连接网络成功后自动重连功能会再次开启", Notifications.Wpf.NotificationType.Error);
+                                                Toast.ShowNotifiy("自动重连", "检测到网络断开但自动重连全部失败", Notifications.Wpf.NotificationType.Error);
+                                                LogAppend(CustomColor.Error, "[自动重连]检测到网络断开但重连全部失败");
+                                                timer_AutoReConnect.Interval = 6000;//重连失败，继续重连，后期改
+                                                break;
+                                            }
                                         }
                                     }
                                 }
                             }
+                            catch { }
                         }
-                        catch { }
-                    }
+                        else
+                        {
+                            Toast.ShowNotifiy("自动重连", "检测到网络断开，但当前不在设置的时间段内，程序不进行自动重连", Notifications.Wpf.NotificationType.Information);
+                            timer_AutoReConnect.Interval = 600006666;//软件不在时段内就不进行操作，为防过度打扰，应当直接挂起时钟
+
+                        }
+                    }//
                 }
                 else
                 {
@@ -1043,7 +1245,7 @@ namespace AutoDialUp
         }
 
         /// <summary>
-        /// 窗口关闭前释放托盘图标
+        /// 窗口关闭前释放托盘图标并保存日志
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1051,7 +1253,6 @@ namespace AutoDialUp
         {
             runTimeRecord[1] = DateTime.Now;
             TimeSpan ts = runTimeRecord[1] - runTimeRecord[0];
-            Console.WriteLine();
             Start: if (Directory.Exists("Log"))
             {
                 try
@@ -1072,6 +1273,7 @@ namespace AutoDialUp
             notifyIcon_MainForm.Dispose();
         }
 
+        #region 关于页的3个打开链接按钮
         private void uiSymbolButton_ProjectPage_Click(object sender, EventArgs e)
         {
             Process.Start("https://xn--e-5g8az75bbi3a.com/%E9%A1%B9%E7%9B%AE%E5%8F%91%E5%B8%83/10.html");
@@ -1086,6 +1288,7 @@ namespace AutoDialUp
         {
             Process.Start("https://xn--e-5g8az75bbi3a.com/%E9%A1%B9%E7%9B%AE%E5%8F%91%E5%B8%83/10.html");
         }
+        #endregion
 
         /// <summary>
         /// 窗口热键事件
@@ -1246,6 +1449,204 @@ namespace AutoDialUp
             {
                 ShowErrorDialog("错误", "由于未选择任何热键设置，无需保存");
                 LogAppend(CustomColor.Error, "保存热键配置文件失败：未选择任何热键设置");
+            }
+        }
+
+        /// <summary>
+        /// 保存TimePlan的配置文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void uiSymbolButton_SaveTimePlanConfig_Click(object sender, EventArgs e)
+        {
+            OneDay savingDay = new OneDay() { StartTime = uiTimePicker_StartTime.Text ,EndTime = uiTimePicker_EndTime.Text };
+            if(savingDay.CheckValidity() == true)
+            {
+                //检查TimePlan文件夹是否存在，若不存在则先新建一个文件夹
+                if(Directory.Exists("TimePlan") == false)
+                {
+                    try
+                    {
+                        Directory.CreateDirectory("TimePlan");
+                    }
+                    catch
+                    {
+                        ShowErrorDialog("错误", "TimePlan文件夹不存在且在创建文件夹的过程中出现了未知错误，请重启软件并重试");
+                        return;
+                    }
+                }
+                savingDay.DayIndex = uiComboBox_SelectWhichDay.SelectedIndex + 1;
+                if(uiRadioButton_NormalActions.Checked == true && uiRadioButton_StopActions.Checked == false)
+                    savingDay.Enabled = true;
+                else
+                {
+                    if(uiRadioButton_NormalActions.Checked == false && uiRadioButton_StopActions.Checked == true)
+                        savingDay.Enabled = false;
+                    else
+                    {
+                        ShowErrorDialog("错误", "请选择一个指定行为(正常执行或不执行)才能够保存");
+                        return;
+                    } 
+                }
+                string checkingFileName = string.Empty;
+                //根据日期，文件的名字不同
+                switch (uiComboBox_SelectWhichDay.SelectedIndex + 1)
+                {
+                    case 1:
+                        {
+                            checkingFileName = "Mon.json";
+                            break;
+                        }
+                    case 2:
+                        {
+                            checkingFileName = "Tues.json";
+                            break;
+                        }
+                    case 3:
+                        {
+                            checkingFileName = "Wed.json";
+                            break;
+                        }
+                    case 4:
+                        {
+                            checkingFileName = "Thur.json";
+                            break;
+                        }
+                    case 5:
+                        {
+                            checkingFileName = "Fri.json";
+                            break;
+                        }
+                    case 6:
+                        {
+                            checkingFileName = "Sat.json";
+                            break;
+                        }
+                    case 7:
+                        {
+                            checkingFileName = "Sun.json";
+                            break;
+                        }
+                }
+                if(File.Exists(AppDomain.CurrentDomain.BaseDirectory + string.Format("TimePlan\\{0}", checkingFileName)) == true)
+                {
+                    //先把旧的配置文件删了
+                    if (ShowAskDialog("当前日期的配置文件已存在，是否进行覆盖？\n如果进行覆盖，旧的配置文件将永久失去"))
+                    {
+                        try
+                        {
+                            File.Delete(AppDomain.CurrentDomain.BaseDirectory + string.Format("TimePlan\\{0}", checkingFileName));
+                        }
+                        catch
+                        {
+                            ShowErrorDialog("错误", "在尝试覆盖旧的配置文件时失败了，原因是删除旧的文件失败");
+                            return;
+                        }
+                    }
+                    else
+                        return;
+                }
+                //向目录写入指定名字的配置文件 在这之前先要检查数据完整性
+                if(savingDay.CheckCompleteness() == true)
+                {
+                    try
+                    {
+                        File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + string.Format("TimePlan\\{0}", checkingFileName), Json.Serialize(savingDay));
+                    }
+                    catch
+                    {
+                        ShowErrorDialog("错误", "保存时间段配置文件失败，原因是向指定目录写入文件时失败了");
+                        return;
+                    }
+                }
+                UIMessageDialog.ShowMessageDialog("已保存完毕，需要重启软件才能够生效\n建议将所有需要的日期设置完成后再自行重启", "提示", false, Style);
+            }
+            else
+            {
+                ShowErrorDialog("错误","由于结束时间早于开始时间，无法保存\n请修改后重新保存");
+            }
+        }
+
+        /// <summary>
+        /// 如果选中的日期已经有数据了，就在控件上加载数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void uiComboBox_SelectWhichDay_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OneDay tempDay = null;
+            switch (uiComboBox_SelectWhichDay.SelectedIndex)
+            {
+                case 0:
+                    {
+                        tempDay = DaysCollections.Mon;
+                        break;
+                    }
+
+                case 1:
+                    {
+                        tempDay = DaysCollections.Tues;
+                        break;
+                    }
+
+                case 2:
+                    {
+                        tempDay = DaysCollections.Wed;
+                        break;
+                    }
+
+                case 3:
+                    {
+                        tempDay = DaysCollections.Thur;
+                        break;
+                    }
+
+                case 4:
+                    {
+                        tempDay = DaysCollections.Fri;
+                        break;
+                    }
+
+                case 5:
+                    {
+                        tempDay = DaysCollections.Sat;
+                        break;
+                    }
+
+                case 6:
+                    {
+                        tempDay = DaysCollections.Sun;
+                        break;
+                    }
+
+                default:
+                    {
+                        tempDay = null;
+                        break;
+                    }
+            }
+            //如果有数据就加载数据，没数据就变成默认的数据
+            if(tempDay.Initialized != false)
+            {
+                uiTimePicker_StartTime.Text = tempDay.StartTime;
+                uiTimePicker_EndTime.Text = tempDay.EndTime;
+                if(tempDay.Enabled == true)
+                {
+                    uiRadioButton_NormalActions.Checked = true;
+                    uiRadioButton_StopActions.Checked = false;
+                }
+                else
+                {
+                    uiRadioButton_NormalActions.Checked = false;
+                    uiRadioButton_StopActions.Checked = true;
+                }
+            }
+            else
+            {
+                uiTimePicker_StartTime.Text = @"08:00:00";
+                uiTimePicker_EndTime.Text = @"23:00:00";
+                uiRadioButton_NormalActions.Checked = true;
+                uiRadioButton_StopActions.Checked = false;
             }
         }
     }
