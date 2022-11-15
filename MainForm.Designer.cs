@@ -94,8 +94,8 @@
             this.uiSymbolButton_SourceAddress = new Sunny.UI.UISymbolButton();
             this.uiSymbolButton_ProjectPage = new Sunny.UI.UISymbolButton();
             this.uiSmoothLabel1 = new Sunny.UI.UISmoothLabel();
-            this.uiSymbolLabel3 = new Sunny.UI.UISymbolLabel();
-            this.uiLabel2 = new Sunny.UI.UILabel();
+            this.uiSymbolLabel_VersionNumber = new Sunny.UI.UISymbolLabel();
+            this.uiLabel_SoftwareName = new Sunny.UI.UILabel();
             this.uiLinkLabel1 = new Sunny.UI.UILinkLabel();
             this.uiAvatar1 = new Sunny.UI.UIAvatar();
             this.timer_NetChecker = new System.Windows.Forms.Timer(this.components);
@@ -1031,8 +1031,8 @@
             this.tabPage_About.Controls.Add(this.uiSymbolButton_SourceAddress);
             this.tabPage_About.Controls.Add(this.uiSymbolButton_ProjectPage);
             this.tabPage_About.Controls.Add(this.uiSmoothLabel1);
-            this.tabPage_About.Controls.Add(this.uiSymbolLabel3);
-            this.tabPage_About.Controls.Add(this.uiLabel2);
+            this.tabPage_About.Controls.Add(this.uiSymbolLabel_VersionNumber);
+            this.tabPage_About.Controls.Add(this.uiLabel_SoftwareName);
             this.tabPage_About.Controls.Add(this.uiLinkLabel1);
             this.tabPage_About.Controls.Add(this.uiAvatar1);
             this.tabPage_About.Location = new System.Drawing.Point(4, 40);
@@ -1044,6 +1044,7 @@
             // uiSymbolButton_CheckUpdate
             // 
             this.uiSymbolButton_CheckUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiSymbolButton_CheckUpdate.Enabled = false;
             this.uiSymbolButton_CheckUpdate.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiSymbolButton_CheckUpdate.Location = new System.Drawing.Point(412, 203);
             this.uiSymbolButton_CheckUpdate.MinimumSize = new System.Drawing.Size(1, 1);
@@ -1099,32 +1100,32 @@
             this.uiSmoothLabel1.Text = "愿每一行代码都能改变世界";
             this.uiSmoothLabel1.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
-            // uiSymbolLabel3
+            // uiSymbolLabel_VersionNumber
             // 
-            this.uiSymbolLabel3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiSymbolLabel3.Location = new System.Drawing.Point(400, 99);
-            this.uiSymbolLabel3.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiSymbolLabel3.Name = "uiSymbolLabel3";
-            this.uiSymbolLabel3.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
-            this.uiSymbolLabel3.Size = new System.Drawing.Size(79, 35);
-            this.uiSymbolLabel3.Symbol = 61734;
-            this.uiSymbolLabel3.SymbolOffset = new System.Drawing.Point(2, 0);
-            this.uiSymbolLabel3.SymbolSize = 30;
-            this.uiSymbolLabel3.TabIndex = 4;
-            this.uiSymbolLabel3.Text = "1.0";
-            this.uiSymbolLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiSymbolLabel3.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiSymbolLabel_VersionNumber.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiSymbolLabel_VersionNumber.Location = new System.Drawing.Point(400, 99);
+            this.uiSymbolLabel_VersionNumber.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiSymbolLabel_VersionNumber.Name = "uiSymbolLabel_VersionNumber";
+            this.uiSymbolLabel_VersionNumber.Padding = new System.Windows.Forms.Padding(34, 0, 0, 0);
+            this.uiSymbolLabel_VersionNumber.Size = new System.Drawing.Size(79, 35);
+            this.uiSymbolLabel_VersionNumber.Symbol = 61734;
+            this.uiSymbolLabel_VersionNumber.SymbolOffset = new System.Drawing.Point(2, 0);
+            this.uiSymbolLabel_VersionNumber.SymbolSize = 30;
+            this.uiSymbolLabel_VersionNumber.TabIndex = 4;
+            this.uiSymbolLabel_VersionNumber.Text = "1.0";
+            this.uiSymbolLabel_VersionNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiSymbolLabel_VersionNumber.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
-            // uiLabel2
+            // uiLabel_SoftwareName
             // 
-            this.uiLabel2.Font = new System.Drawing.Font("微软雅黑", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLabel2.Location = new System.Drawing.Point(146, 37);
-            this.uiLabel2.Name = "uiLabel2";
-            this.uiLabel2.Size = new System.Drawing.Size(431, 62);
-            this.uiLabel2.TabIndex = 2;
-            this.uiLabel2.Text = "易拨 - 自动拨号上网";
-            this.uiLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiLabel2.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiLabel_SoftwareName.Font = new System.Drawing.Font("微软雅黑", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel_SoftwareName.Location = new System.Drawing.Point(146, 37);
+            this.uiLabel_SoftwareName.Name = "uiLabel_SoftwareName";
+            this.uiLabel_SoftwareName.Size = new System.Drawing.Size(431, 62);
+            this.uiLabel_SoftwareName.TabIndex = 2;
+            this.uiLabel_SoftwareName.Text = "易拨 - 自动拨号上网";
+            this.uiLabel_SoftwareName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiLabel_SoftwareName.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
             // uiLinkLabel1
             // 
@@ -1316,9 +1317,9 @@
         private System.Windows.Forms.ToolStripMenuItem 退出软件ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private Sunny.UI.UIAvatar uiAvatar1;
-        private Sunny.UI.UILabel uiLabel2;
+        private Sunny.UI.UILabel uiLabel_SoftwareName;
         private Sunny.UI.UILinkLabel uiLinkLabel1;
-        private Sunny.UI.UISymbolLabel uiSymbolLabel3;
+        private Sunny.UI.UISymbolLabel uiSymbolLabel_VersionNumber;
         private Sunny.UI.UISmoothLabel uiSmoothLabel1;
         private Sunny.UI.UISymbolButton uiSymbolButton_CheckUpdate;
         private Sunny.UI.UISymbolButton uiSymbolButton_SourceAddress;

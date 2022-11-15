@@ -82,6 +82,7 @@
     <Compile Include="Data\HotKey.cs" />
     <Compile Include="Data\Software.cs" />
     <Compile Include="Data\TimePlan.cs" />
+    <Compile Include="Data\Version.cs" />
     <Compile Include="DialUp\ADSL.cs" />
     <Compile Include="ConnectCheck.cs" />
     <Compile Include="MainForm.cs">
@@ -91,6 +92,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DialUp\PPPoE.cs" />
+    <Compile Include="Net\Get.cs" />
     <Compile Include="OpenFolder.cs" />
     <Compile Include="OperateIniFile.cs" />
     <Compile Include="Program.cs" />

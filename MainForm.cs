@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using Sunny.UI;
 using AutoDialUp.Data;
 using AutoDialUp.Crypt;
+using AutoDialUp.Net;
 using Newtonsoft.Json;
 using Application = System.Windows.Forms.Application;
 using System.Windows.Threading;
@@ -21,6 +22,7 @@ using static System.Net.Mime.MediaTypeNames;
 using static AutoDialUp.Data.TimePlan;
 using System.Drawing.Text;
 using System.Web.UI.Design;
+using Version = AutoDialUp.Data.Version;
 
 namespace AutoDialUp
 {
@@ -40,9 +42,12 @@ namespace AutoDialUp
         int _autoConnectTimerLocker = -1;
         int _autoReConnectFlag = -1;//0是未联网，1是已联网
         int successConnectCount = 0;
+        int _versionCheckLocker = 0;//获取网络上的版本信息只获取一次
+        Thread _timePlanEveryDayRefreshThread;
         DateTime[] runTimeRecord = new DateTime[2];
         List<string> timePlanSourceData = new List<string>();
         OneDay Today = new OneDay(true);
+        Version versionData = new Version();
         public MainForm()
         {
             InitializeComponent();
@@ -429,8 +434,8 @@ namespace AutoDialUp
                 }
             });
             timePlanEveryDayRefreshThread.Start();
+            _timePlanEveryDayRefreshThread = timePlanEveryDayRefreshThread;
             LogAppend(CustomColor.Information, "主窗口初始化事件处理完毕");
-
             #region 测试功能区
             /*OneDay testDay = new OneDay();
             MessageBox.Show(testDay.StartTime.ToString());*/
@@ -477,6 +482,18 @@ namespace AutoDialUp
                     uiRichTextBox_Log.Text = String.Empty;
                     LogAppend(CustomColor.Information, "由于日志内容过多，防止软件崩溃已自动清理");
                 }
+            }
+            catch { }
+        }
+
+        private void VersionDataCheck()
+        {
+            try
+            {
+                versionData = JsonConvert.DeserializeObject<Version>(GetMethod.Get("https://data.xn--e-5g8az75bbi3a.com/AutoDialUp/Version.json"));
+                uiLabel_SoftwareName.Text = versionData.SoftwareName;
+                uiSymbolLabel_VersionNumber.Text = versionData.VersionNumber.ToString();
+                uiSymbolButton_CheckUpdate.Enabled = true;
             }
             catch { }
         }
@@ -809,6 +826,12 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "调制解调器上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
                             _autoReConnectFlag = 1;
+                            if(_versionCheckLocker == 0)
+                            {
+                                Thread checker = new Thread(VersionDataCheck);
+                                checker.Start();
+                                _versionCheckLocker++;
+                            }
                             if (successConnectCount < 10)
                                 successConnectCount++;
                             else
@@ -837,6 +860,12 @@ namespace AutoDialUp
                             uiSymbolLabel_InternetDeviceType.Text = "使用网卡上网";
                             uiSymbolLabel_PingOK.Text = "Ping正常";
                             _autoReConnectFlag = 1;
+                            if (_versionCheckLocker == 0)
+                            {
+                                Thread checker = new Thread(VersionDataCheck);
+                                checker.Start();
+                                _versionCheckLocker++;
+                            }
                             if (successConnectCount < 10)
                                 successConnectCount++;
                             else
@@ -1271,22 +1300,30 @@ namespace AutoDialUp
                 catch { }
             }
             notifyIcon_MainForm.Dispose();
+            try
+            {
+                _timePlanEveryDayRefreshThread.Abort();
+            }
+            catch { }
         }
 
         #region 关于页的3个打开链接按钮
         private void uiSymbolButton_ProjectPage_Click(object sender, EventArgs e)
         {
-            Process.Start("https://xn--e-5g8az75bbi3a.com/%E9%A1%B9%E7%9B%AE%E5%8F%91%E5%B8%83/10.html");
+            Process.Start(versionData.ProjectPageUrl);
         }
 
         private void uiSymbolButton_SourceAddress_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/EJianZQ/AutoDialUp");
+            Process.Start(versionData.OpenSourceUrl);
         }
 
         private void uiSymbolButton_CheckUpdate_Click(object sender, EventArgs e)
         {
-            Process.Start("https://xn--e-5g8az75bbi3a.com/%E9%A1%B9%E7%9B%AE%E5%8F%91%E5%B8%83/10.html");
+            if (Convert.ToDouble(uiSymbolLabel_VersionNumber.Text) != versionData.VersionNumber)
+                UIMessageDialog.ShowMessageDialog(String.Format("当前软件可能不是最新版\n服务器数据中最新版版本为:{0}\n可通过点击项目地址按钮下载最新版",versionData.VersionNumber.ToString()), "版本检查", false, Style);
+            else
+                UIMessageDialog.ShowMessageDialog("恭喜！当前软件为最新版！", "版本检查", false, Style);
         }
         #endregion
 
