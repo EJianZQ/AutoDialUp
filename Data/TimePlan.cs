@@ -11,7 +11,7 @@ namespace AutoDialUp.Data
         public class OneDay
         {
             /// <summary>
-            /// 是否初始化，用于判断是否在时间内时如果数据未完成初始化则直接放行
+            /// 是否初始化
             /// </summary>
             public bool Initialized { get; set; }
             /// <summary>
@@ -110,7 +110,14 @@ namespace AutoDialUp.Data
 
             public OneDay(bool ifInitialized)
             {
-                Initialized = ifInitialized;
+                if(ifInitialized == false)
+                {
+                    Initialized = true;
+                    Enabled = true;
+                    StartTime = @"00:00:01";
+                    EndTime = @"23:59:59";
+
+                }
             }
 
             /// <summary>
